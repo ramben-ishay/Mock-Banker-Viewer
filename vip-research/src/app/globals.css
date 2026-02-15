@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+/* Satoshi Variable from CDN */
+@font-face {
+  font-family: "Satoshi Variable";
+  src: url("https://cdn.fontshare.com/wf/BNPRT6MRDVZHOIYTO5IG6BDNLA3GMKTP/WHBQ2X344MIPTCFDWKXHDD4NVPZP554K/MPSHWKL7GI37GIN34PGFWMHBPJ6AET5S.woff2")
+    format("woff2");
+  font-weight: 300 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@theme inline {
+  /* === BRAND COLORS === */
+  --color-brand-100: #ecf0ff;
+  --color-brand-200: #c2ceff;
+  --color-brand-300: #98a9ff;
+  --color-brand-400: #6e84ff;
+  --color-brand-500: #444aff;
+  --color-brand-600: #3039dd;
+  --color-brand-700: #2025bb;
+  --color-brand-800: #171b8d;
+  --color-brand-900: #18193d;
+
+  /* === NEUTRAL COLORS === */
+  --color-neutral-000: #ffffff;
+  --color-neutral-100: #f9fafc;
+  --color-neutral-200: #f2f5fa;
+  --color-neutral-300: #e6eaf2;
+  --color-neutral-400: #dadfeb;
+  --color-neutral-500: #c4cbdc;
+  --color-neutral-600: #878ba4;
+  --color-neutral-700: #70738a;
+  --color-neutral-800: #545666;
+  --color-neutral-900: #34353d;
+  --color-neutral-950: #111214;
+
+  /* === STATUS COLORS === */
+  --color-status-red-100: #ffeaea;
+  --color-status-red-500: #f6554f;
+  --color-status-red-700: #bd130e;
+
+  --color-status-orange-100: #fff6eb;
+  --color-status-orange-500: #ffa537;
+  --color-status-orange-700: #ad6610;
+
+  --color-status-green-100: #f4fff4;
+  --color-status-green-500: #5ad45a;
+  --color-status-green-700: #228322;
+
+  --color-status-blue-100: #edf4ff;
+  --color-status-blue-500: #4a92ff;
+  --color-status-blue-700: #2567c9;
+
+  /* === FONT FAMILIES === */
+  --font-heading: "Satoshi Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* === FONT SIZES (Type Scale) === */
+  --font-size-h1: 96px;
+  --font-size-h2: 68px;
+  --font-size-h3: 54px;
+  --font-size-h4: 40px;
+  --font-size-h5: 28px;
+  --font-size-h6: 23px;
+  --font-size-subhead-1: 20px;
+  --font-size-subhead-2: 18px;
+  --font-size-body-1: 18px;
+  --font-size-body-2: 16px;
+  --font-size-body-3: 14px;
+  --font-size-caption: 12px;
+  --font-size-overline: 11px;
+  --font-size-tiny: 10px;
+
+  /* === BORDER RADII === */
+  --radius-xsm: 4px;
+  --radius-cta: 8px;
+  --radius-popup: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* === SHADOWS === */
+  --shadow-tight: 0px 1px 3px rgba(84, 86, 102, 0.1);
+  --shadow-fluffy: 0px 4px 16px rgba(17, 18, 20, 0.1);
+  --shadow-overlay: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 10px 40px rgba(0, 0, 0, 0.1);
+
+  /* === SPACING (4px base) === */
+  --spacing-0: 0px;
+  --spacing-0-25: 1px;
+  --spacing-0-5: 2px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+}
+
+/* === BASE STYLES === */
+body {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-neutral-950);
+}
+
+h1 { font-size: 96px; line-height: 1.15; }
+h2 { font-size: 68px; line-height: 1.15; }
+h3 { font-size: 54px; line-height: 1.2; }
+h4 { font-size: 40px; line-height: 1.2; }
+h5 { font-size: 28px; line-height: 1.3; }
+h6 { font-size: 23px; line-height: 1.3; }
+
+/* === UTILITY CLASSES === */
+.glass {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Focus ring utility */
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-brand-300);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-neutral-200);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-400);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral-500);
+}

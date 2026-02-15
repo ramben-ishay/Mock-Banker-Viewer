@@ -1,0 +1,84 @@
+{
+  "baseUrl": "http://localhost:3000",
+  "routes": [
+    {
+      "name": "landing",
+      "path": "/",
+      "states": [
+        "default",
+        "drag_over"
+      ]
+    },
+    {
+      "name": "vips_list",
+      "path": "/vips",
+      "states": [
+        "crm_empty",
+        "crm_connected",
+        "add_vip_modal_open",
+        "add_vip_validation_error"
+      ]
+    },
+    {
+      "name": "vip_detail",
+      "path": "/vips/vip-1",
+      "states": [
+        "default",
+        "comments_panel_open",
+        "share_modal_open",
+        "share_modal_quotes_expanded"
+      ],
+      "variants": [
+        "/vips/vip-2",
+        "/vips/vip-3",
+        "/vips/vip-4",
+        "/vips/vip-5",
+        "/vips/vip-6",
+        "/vips/vip-7",
+        "/vips/vip-8"
+      ]
+    },
+    {
+      "name": "documents",
+      "path": "/documents",
+      "states": [
+        "default",
+        "search_filtered",
+        "version_alert_present",
+        "document_share_modal_open"
+      ]
+    },
+    {
+      "name": "document_analytics",
+      "path": "/document/doc-1",
+      "states": [
+        "default"
+      ]
+    },
+    {
+      "name": "dashboard",
+      "path": "/dashboard",
+      "states": [
+        "default"
+      ]
+    },
+    {
+      "name": "viewer",
+      "path": "/viewer/doc-1",
+      "states": [
+        "default",
+        "ai_drawer_open",
+        "comments_drawer_open",
+        "search_open",
+        "thumbnails_open",
+        "walkthrough_open",
+        "vip_scoped",
+        "parity_mode"
+      ],
+      "variants": [
+        "/viewer/doc-1?vipId=vip-1",
+        "/viewer/doc-1?parity=0"
+      ]
+    }
+  ]
+}

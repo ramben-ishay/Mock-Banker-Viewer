@@ -1,0 +1,72 @@
+body:
+  background: rgba(0, 0, 0, 0)
+  color: rgb(0, 0, 0)
+  border: rgb(0, 0, 0)
+  boxShadow: none
+
+header:
+  background: rgb(255, 255, 255)
+  color: rgb(0, 0, 0)
+  border: rgb(0, 0, 0)
+  boxShadow: none
+
+.wqm1wqv:
+  background: rgb(255, 255, 255)
+  color: rgb(0, 0, 0)
+  border: rgb(0, 0, 0)
+  boxShadow: none
+
+.w1s58ls4:
+  background: rgba(0, 0, 0, 0)
+  color: rgb(0, 0, 0)
+  border: rgb(0, 0, 0)
+  boxShadow: none
+
+.p1p3p7q9:
+  background: rgba(0, 0, 0, 0)
+  color: rgb(0, 0, 0)
+  border: rgb(0, 0, 0)
+  boxShadow: none
+
+.wv5pz0e:
+  background: rgb(255, 255, 255)
+  color: rgb(0, 0, 0)
+  border: rgb(0, 0, 0)
+  boxShadow: none
+
+.s4u2ggh:
+  background: rgb(255, 255, 255)
+  color: rgb(0, 0, 0)
+  border: rgb(0, 0, 0)
+  boxShadow: none
+
+button.t1rhhyii:
+  background: rgb(255, 255, 255)
+  color: rgb(17, 18, 20)
+  border: rgb(17, 18, 20)
+  boxShadow: none
+
+button.h1gypkw:
+  background: rgba(0, 0, 0, 0)
+  color: rgb(17, 18, 20)
+  border: rgb(218, 223, 235)
+  boxShadow: none
+
+.s19oyb7t:
+  background: rgba(255, 255, 255, 0.5)
+  color: rgb(0, 0, 0)
+  border: rgb(0, 0, 0)
+  boxShadow: none
+
+.tg3z6dj:
+  background: rgba(0, 0, 0, 0)
+  color: rgb(0, 0, 0)
+  border: rgb(0, 0, 0)
+  boxShadow: none
+
+.s5cd020:
+  background: rgba(0, 0, 0, 0)
+  color: rgb(0, 0, 0)
+  border: rgb(0, 0, 0)
+  boxShadow: none
+

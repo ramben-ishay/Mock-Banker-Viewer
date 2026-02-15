@@ -1,0 +1,546 @@
+[
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_landing_default_desktop.png",
+    "capturedAt": "2026-02-15T12:58:31.206Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/",
+    "state": "drag_over",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_landing_drag_over_desktop.png",
+    "capturedAt": "2026-02-15T12:58:32.639Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips",
+    "state": "crm_empty",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_crm_empty_desktop.png",
+    "capturedAt": "2026-02-15T12:58:33.660Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips",
+    "state": "crm_connected",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_crm_connected_desktop.png",
+    "capturedAt": "2026-02-15T12:58:37.438Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips",
+    "state": "add_vip_modal_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_add_vip_modal_open_desktop.png",
+    "capturedAt": "2026-02-15T12:58:38.856Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips",
+    "state": "add_vip_validation_error",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_add_vip_validation_error_desktop.png",
+    "capturedAt": "2026-02-15T12:58:40.433Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-1",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-1_default_desktop.png",
+    "capturedAt": "2026-02-15T12:58:45.312Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-1",
+    "state": "comments_panel_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-1_comments_panel_open_desktop.png",
+    "capturedAt": "2026-02-15T12:58:50.505Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-1",
+    "state": "share_modal_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-1_share_modal_open_desktop.png",
+    "capturedAt": "2026-02-15T12:58:55.555Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-1",
+    "state": "share_modal_quotes_expanded",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-1_share_modal_quotes_expanded_desktop.png",
+    "capturedAt": "2026-02-15T12:59:00.654Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-2",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-2_default_desktop.png",
+    "capturedAt": "2026-02-15T12:59:05.457Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-2",
+    "state": "comments_panel_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-2_comments_panel_open_desktop.png",
+    "capturedAt": "2026-02-15T12:59:10.654Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-2",
+    "state": "share_modal_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-2_share_modal_open_desktop.png",
+    "capturedAt": "2026-02-15T12:59:16.275Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-2",
+    "state": "share_modal_quotes_expanded",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-2_share_modal_quotes_expanded_desktop.png",
+    "capturedAt": "2026-02-15T12:59:22.333Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-3",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-3_default_desktop.png",
+    "capturedAt": "2026-02-15T12:59:27.141Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-3",
+    "state": "comments_panel_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-3_comments_panel_open_desktop.png",
+    "capturedAt": "2026-02-15T12:59:32.348Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-3",
+    "state": "share_modal_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-3_share_modal_open_desktop.png",
+    "capturedAt": "2026-02-15T12:59:38.006Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-3",
+    "state": "share_modal_quotes_expanded",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-3_share_modal_quotes_expanded_desktop.png",
+    "capturedAt": "2026-02-15T12:59:44.072Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-4",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-4_default_desktop.png",
+    "capturedAt": "2026-02-15T12:59:48.910Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-4",
+    "state": "comments_panel_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-4_comments_panel_open_desktop.png",
+    "capturedAt": "2026-02-15T12:59:54.155Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-4",
+    "state": "share_modal_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-4_share_modal_open_desktop.png",
+    "capturedAt": "2026-02-15T12:59:59.854Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-4",
+    "state": "share_modal_quotes_expanded",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-4_share_modal_quotes_expanded_desktop.png",
+    "capturedAt": "2026-02-15T13:00:05.923Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-5",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-5_default_desktop.png",
+    "capturedAt": "2026-02-15T13:00:10.920Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-5",
+    "state": "comments_panel_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-5_comments_panel_open_desktop.png",
+    "capturedAt": "2026-02-15T13:00:16.292Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-5",
+    "state": "share_modal_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-5_share_modal_open_desktop.png",
+    "capturedAt": "2026-02-15T13:00:22.123Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-5",
+    "state": "share_modal_quotes_expanded",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-5_share_modal_quotes_expanded_desktop.png",
+    "capturedAt": "2026-02-15T13:00:28.375Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-6",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-6_default_desktop.png",
+    "capturedAt": "2026-02-15T13:00:33.403Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-6",
+    "state": "comments_panel_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-6_comments_panel_open_desktop.png",
+    "capturedAt": "2026-02-15T13:00:38.822Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-6",
+    "state": "share_modal_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-6_share_modal_open_desktop.png",
+    "capturedAt": "2026-02-15T13:00:44.618Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-6",
+    "state": "share_modal_quotes_expanded",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-6_share_modal_quotes_expanded_desktop.png",
+    "capturedAt": "2026-02-15T13:00:50.991Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-7",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-7_default_desktop.png",
+    "capturedAt": "2026-02-15T13:00:56.077Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-7",
+    "state": "comments_panel_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-7_comments_panel_open_desktop.png",
+    "capturedAt": "2026-02-15T13:01:01.588Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-7",
+    "state": "share_modal_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-7_share_modal_open_desktop.png",
+    "capturedAt": "2026-02-15T13:01:07.520Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-7",
+    "state": "share_modal_quotes_expanded",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-7_share_modal_quotes_expanded_desktop.png",
+    "capturedAt": "2026-02-15T13:01:13.860Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-8",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-8_default_desktop.png",
+    "capturedAt": "2026-02-15T13:01:19.464Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-8",
+    "state": "comments_panel_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-8_comments_panel_open_desktop.png",
+    "capturedAt": "2026-02-15T13:01:25.456Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-8",
+    "state": "share_modal_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-8_share_modal_open_desktop.png",
+    "capturedAt": "2026-02-15T13:01:31.889Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/vips/vip-8",
+    "state": "share_modal_quotes_expanded",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_vips_vip-8_share_modal_quotes_expanded_desktop.png",
+    "capturedAt": "2026-02-15T13:01:38.753Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/documents",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_documents_default_desktop.png",
+    "capturedAt": "2026-02-15T13:01:39.854Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/documents",
+    "state": "search_filtered",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_documents_search_filtered_desktop.png",
+    "capturedAt": "2026-02-15T13:01:41.122Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/documents",
+    "state": "version_alert_present",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_documents_version_alert_present_desktop.png",
+    "capturedAt": "2026-02-15T13:01:42.226Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/documents",
+    "state": "document_share_modal_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_documents_document_share_modal_open_desktop.png",
+    "capturedAt": "2026-02-15T13:01:43.708Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/document/doc-1",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_document_doc-1_default_desktop.png",
+    "capturedAt": "2026-02-15T13:01:44.774Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/dashboard",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_dashboard_default_desktop.png",
+    "capturedAt": "2026-02-15T13:01:45.788Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1_default_desktop.png",
+    "capturedAt": "2026-02-15T13:01:46.810Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1",
+    "state": "ai_drawer_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1_ai_drawer_open_desktop.png",
+    "capturedAt": "2026-02-15T13:01:48.197Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1",
+    "state": "comments_drawer_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1_comments_drawer_open_desktop.png",
+    "capturedAt": "2026-02-15T13:01:49.601Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1",
+    "state": "search_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1_search_open_desktop.png",
+    "capturedAt": "2026-02-15T13:01:51.008Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1",
+    "state": "thumbnails_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1_thumbnails_open_desktop.png",
+    "capturedAt": "2026-02-15T13:01:52.411Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1",
+    "state": "walkthrough_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1_walkthrough_open_desktop.png",
+    "capturedAt": "2026-02-15T13:01:53.805Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1",
+    "state": "vip_scoped",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1_vip_scoped_desktop.png",
+    "capturedAt": "2026-02-15T13:01:54.830Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1",
+    "state": "parity_mode",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1_parity_mode_desktop.png",
+    "capturedAt": "2026-02-15T13:01:55.847Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?vipId=vip-1",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?vipId=vip-1_default_desktop.png",
+    "capturedAt": "2026-02-15T13:01:56.854Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?vipId=vip-1",
+    "state": "ai_drawer_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?vipId=vip-1_ai_drawer_open_desktop.png",
+    "capturedAt": "2026-02-15T13:01:57.879Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?vipId=vip-1",
+    "state": "comments_drawer_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?vipId=vip-1_comments_drawer_open_desktop.png",
+    "capturedAt": "2026-02-15T13:01:58.892Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?vipId=vip-1",
+    "state": "search_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?vipId=vip-1_search_open_desktop.png",
+    "capturedAt": "2026-02-15T13:01:59.922Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?vipId=vip-1",
+    "state": "thumbnails_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?vipId=vip-1_thumbnails_open_desktop.png",
+    "capturedAt": "2026-02-15T13:02:00.947Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?vipId=vip-1",
+    "state": "walkthrough_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?vipId=vip-1_walkthrough_open_desktop.png",
+    "capturedAt": "2026-02-15T13:02:01.972Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?vipId=vip-1",
+    "state": "vip_scoped",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?vipId=vip-1_vip_scoped_desktop.png",
+    "capturedAt": "2026-02-15T13:02:03.004Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?vipId=vip-1",
+    "state": "parity_mode",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?vipId=vip-1_parity_mode_desktop.png",
+    "capturedAt": "2026-02-15T13:02:04.036Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?parity=0",
+    "state": "default",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?parity=0_default_desktop.png",
+    "capturedAt": "2026-02-15T13:02:05.056Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?parity=0",
+    "state": "ai_drawer_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?parity=0_ai_drawer_open_desktop.png",
+    "capturedAt": "2026-02-15T13:02:06.078Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?parity=0",
+    "state": "comments_drawer_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?parity=0_comments_drawer_open_desktop.png",
+    "capturedAt": "2026-02-15T13:02:07.092Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?parity=0",
+    "state": "search_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?parity=0_search_open_desktop.png",
+    "capturedAt": "2026-02-15T13:02:08.096Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?parity=0",
+    "state": "thumbnails_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?parity=0_thumbnails_open_desktop.png",
+    "capturedAt": "2026-02-15T13:02:09.100Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?parity=0",
+    "state": "walkthrough_open",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?parity=0_walkthrough_open_desktop.png",
+    "capturedAt": "2026-02-15T13:02:10.121Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?parity=0",
+    "state": "vip_scoped",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?parity=0_vip_scoped_desktop.png",
+    "capturedAt": "2026-02-15T13:02:11.138Z"
+  },
+  {
+    "passId": "pass01",
+    "viewport": "desktop",
+    "route": "/viewer/doc-1?parity=0",
+    "state": "parity_mode",
+    "screenshot": "/Users/rambenishay/Downloads/Mock Banker Viewer/vip-research/design-review/runs/pass01/screenshots/pass01_viewer_doc-1?parity=0_parity_mode_desktop.png",
+    "capturedAt": "2026-02-15T13:02:12.150Z"
+  }
+]

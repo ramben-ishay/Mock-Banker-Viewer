@@ -1,0 +1,337 @@
+Tag: A, Text: 
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: svjf4jh
+  Pos: x=8 y=8 w=24 h=24
+
+Tag: BUTTON, Text: Cancel
+  ID: workspace-title-cancel-edit-button, AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: False
+  Classes: su3r411
+  Pos: x=0 y=0 w=0 h=0
+
+Tag: BUTTON, Text: Preflight
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: t1y0lue2 pb4tb73 b316d96 bp93l9m
+  Pos: x=1276 y=4 w=32 h=32
+
+Tag: BUTTON, Text: Share
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: h1gypkw  sc6300s bp93l9m
+  Pos: x=1316 y=4 w=84 h=32
+
+Tag: SPAN, Text: 
+  ID: , AriaLabel: Guest avatar
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: am65hcu a1mthhyu bjzkxfu
+  Pos: x=1408 y=8 w=24 h=24
+
+Tag: DIV, Text: Screen capture blockedThe document owner enabled screen shield to prevent screen capture for this do
+  ID: , AriaLabel: Content protection active
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: p1mt3cf7
+  Pos: x=0 y=40 w=1440 h=860
+
+Tag: BUTTON, Text: Show thumbnails
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: t1y0lue2  b316d96 bp93l9m
+  Pos: x=12 y=53 w=24 h=24
+
+Tag: DIV, Text: Page
+  ID: , AriaLabel: Page 1 of 4
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: m1qnxgbe chxnnjw b1j7vrpk
+  Pos: x=557 y=53 w=104 h=24
+
+Tag: BUTTON, Text: 
+  ID: , AriaLabel: Show thumbnails
+  DataTestId: None, Disabled: False
+  Visible: False
+  Classes: p1ix7lls
+  Pos: x=0 y=0 w=0 h=0
+
+Tag: BUTTON, Text: Zoom out
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: b316d96 bp93l9m
+  Pos: x=686 y=53 w=24 h=24
+
+Tag: INPUT, Text: 
+  ID: , AriaLabel: Current zoom
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: s1v37e3g
+  Pos: x=711 y=54 w=50 h=22
+
+Tag: BUTTON, Text: Zoom in
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: b316d96 bp93l9m
+  Pos: x=762 y=53 w=24 h=24
+
+Tag: BUTTON, Text: Download
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: b316d96 bp93l9m
+  Pos: x=1307 y=53 w=24 h=24
+
+Tag: BUTTON, Text: Print
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: b316d96 bp93l9m
+  Pos: x=1335 y=53 w=24 h=24
+
+Tag: BUTTON, Text: Search in document
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: s1prqkh0 m1qnxgbe s1ldmlkq b316d96 bp93l9m
+  Pos: x=1363 y=53 w=24 h=24
+
+Tag: BUTTON, Text: Enter search term
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: True
+  Visible: True
+  Classes: smw1a37  b316d96 bp93l9m
+  Pos: x=1290 y=83 w=32 h=32
+
+Tag: BUTTON, Text: Enter search term
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: True
+  Visible: True
+  Classes: smw1a37  b316d96 bp93l9m
+  Pos: x=1322 y=83 w=32 h=32
+
+Tag: BUTTON, Text: Close search bar
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: smw1a37  b316d96 bp93l9m
+  Pos: x=1355 y=83 w=32 h=32
+
+Tag: OL, Text: 
+  ID: , AriaLabel: Page thumbnails
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: pb9uy3s
+  Pos: x=8 y=97 w=0 h=787
+
+Tag: BUTTON, Text: 
+  ID: , AriaLabel: Page 1
+  DataTestId: None, Disabled: True
+  Visible: True
+  Classes: px7ksic
+  Pos: x=13 y=113 w=86 h=111
+
+Tag: BUTTON, Text: 
+  ID: , AriaLabel: Page 2
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: px7ksic
+  Pos: x=13 y=289 w=86 h=111
+
+Tag: BUTTON, Text: 
+  ID: , AriaLabel: Page 3
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: px7ksic
+  Pos: x=13 y=465 w=86 h=111
+
+Tag: BUTTON, Text: 
+  ID: , AriaLabel: Page 4
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: px7ksic
+  Pos: x=13 y=640 w=86 h=111
+
+Tag: DIV, Text: Ask AIShareCommentsMore
+  ID: , AriaLabel: Bottom Action
+  DataTestId: None, Disabled: False
+  Visible: False
+  Classes: s1u2qsqa
+  Pos: x=0 y=0 w=0 h=0
+
+Tag: BUTTON, Text: Ask AI
+  ID: , AriaLabel: AI Assistant
+  DataTestId: None, Disabled: False
+  Visible: False
+  Classes: s1bqq2qd
+  Pos: x=0 y=0 w=0 h=0
+
+Tag: BUTTON, Text: Share
+  ID: , AriaLabel: Share
+  DataTestId: None, Disabled: False
+  Visible: False
+  Classes: s1bqq2qd
+  Pos: x=0 y=0 w=0 h=0
+
+Tag: BUTTON, Text: Comments
+  ID: , AriaLabel: Comments
+  DataTestId: None, Disabled: True
+  Visible: False
+  Classes: s1bqq2qd
+  Pos: x=0 y=0 w=0 h=0
+
+Tag: BUTTON, Text: More
+  ID: , AriaLabel: Show Mobile Bottom Actions Sheet
+  DataTestId: None, Disabled: False
+  Visible: False
+  Classes: s1bqq2qd
+  Pos: x=0 y=0 w=0 h=0
+
+Tag: BUTTON, Text: #intercom-container .intercom-app .intercom-messenger-frame {
+                        translate: -4p
+  ID: , AriaLabel: Toggle support chat
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: s1b30g5e
+  Pos: x=16 y=844 w=40 h=40
+
+Tag: ASIDE, Text: Ask AICommentsTimelineDocument VersionsDocument AnalyticsDocument Settings
+  ID: , AriaLabel: Workspace side panel
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: wv5pz0e
+  Pos: x=1400 y=40 w=40 h=860
+
+Tag: BUTTON, Text: Ask AI
+  ID: , AriaLabel: Ask AI sidebar
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: t1y0lue2 gtnfe40 g55kzq acvjrk6 b316d96 bp93l9m
+  Pos: x=1404 y=48 w=32 h=32
+
+Tag: BUTTON, Text: Comments
+  ID: , AriaLabel: Comments sidebar
+  DataTestId: None, Disabled: True
+  Visible: True
+  Classes: t1y0lue2 h1gypkw b316d96 bp93l9m
+  Pos: x=1404 y=88 w=32 h=32
+
+Tag: BUTTON, Text: Timeline
+  ID: , AriaLabel: Timeline sidebar
+  DataTestId: None, Disabled: True
+  Visible: True
+  Classes: t1y0lue2 h1gypkw b316d96 bp93l9m
+  Pos: x=1404 y=128 w=32 h=32
+
+Tag: BUTTON, Text: Document Versions
+  ID: , AriaLabel: Document Versions sidebar
+  DataTestId: None, Disabled: True
+  Visible: True
+  Classes: t1y0lue2  b316d96 bp93l9m
+  Pos: x=1404 y=168 w=32 h=32
+
+Tag: BUTTON, Text: Document Analytics
+  ID: , AriaLabel: Document Analytics sidebar
+  DataTestId: None, Disabled: True
+  Visible: True
+  Classes: t1y0lue2  b316d96 bp93l9m
+  Pos: x=1404 y=208 w=32 h=32
+
+Tag: BUTTON, Text: Document Settings
+  ID: , AriaLabel: Document Settings sidebar
+  DataTestId: None, Disabled: True
+  Visible: True
+  Classes: t1y0lue2  b316d96 bp93l9m
+  Pos: x=1404 y=248 w=32 h=32
+
+Tag: BUTTON, Text: Close Document Summary Popover
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: b316d96 bp93l9m
+  Pos: x=1384 y=444 w=24 h=24
+
+Tag: BUTTON, Text: Chat With AI
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: t1rhhyii gtnfe40 g55kzq acvjrk6 s10xp55t bp93l9m
+  Pos: x=993 y=840 w=415 h=32
+
+Tag: SECTION, Text: 
+  ID: , AriaLabel: Notifications alt+T
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: 
+  Pos: x=0 y=900 w=1440 h=0
+
+Tag: DIV, Text: Factify ReaderLog in to access the documentGoogleOR CONTINUE WITH EMAILBy continuing, you agree to o
+  ID: , AriaLabel: Mobile bottom sheet overlay
+  DataTestId: None, Disabled: False
+  Visible: False
+  Classes: m1coqqkm
+  Pos: x=0 y=0 w=1440 h=900
+
+Tag: DIV, Text: Factify ReaderLog in to access the documentGoogleOR CONTINUE WITH EMAILBy continuing, you agree to o
+  ID: , AriaLabel: mobile-workspace-login
+  DataTestId: None, Disabled: False
+  Visible: False
+  Classes: m9iwnzi
+  Pos: x=0 y=900 w=1440 h=388
+
+Tag: BUTTON, Text: Google
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: s1eqhwm1 bp93l9m
+  Pos: x=24 y=1020 w=317 h=40
+
+Tag: BUTTON, Text: 
+  ID: , AriaLabel: Submit email
+  DataTestId: None, Disabled: True
+  Visible: True
+  Classes: s1v4hzjj
+  Pos: x=301 y=1108 w=40 h=40
+
+Tag: A, Text: Terms of Service
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: 
+  Pos: x=212 y=1156 w=100 h=14
+
+Tag: A, Text: Privacy Policy
+  ID: , AriaLabel: None
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: 
+  Pos: x=143 y=1172 w=79 h=14
+
+Tag: A, Text: support@factify.com
+  ID: , AriaLabel: Contact support via email
+  DataTestId: None, Disabled: False
+  Visible: True
+  Classes: su3r411
+  Pos: x=121 y=1228 w=139 h=20
+
+Tag: DIV, Text: JP_Research_ESG_Clean_Energy_2026_Sector_ReviewDownloadPrintTimelineVersionsAnalyticsSettings
+  ID: , AriaLabel: Mobile bottom sheet overlay
+  DataTestId: None, Disabled: False
+  Visible: False
+  Classes: m1coqqkm
+  Pos: x=0 y=0 w=1440 h=900
+
+Tag: DIV, Text: JP_Research_ESG_Clean_Energy_2026_Sector_ReviewDownloadPrintTimelineVersionsAnalyticsSettings
+  ID: , AriaLabel: Document actions
+  DataTestId: None, Disabled: False
+  Visible: False
+  Classes: m9iwnzi
+  Pos: x=0 y=900 w=1440 h=326
+

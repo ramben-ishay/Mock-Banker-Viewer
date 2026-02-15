@@ -1,0 +1,21 @@
+{
+  "passId": "pass01",
+  "summary": {
+    "scores": {
+      "visual_hierarchy": 100,
+      "token_consistency": 100,
+      "interaction_feedback": 100,
+      "density_readability": 100,
+      "accessibility_quick": 100
+    },
+    "weightedTotal": 100,
+    "pass": true
+  },
+  "bySeverity": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "issues": []
+}

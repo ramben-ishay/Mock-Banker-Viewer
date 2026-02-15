@@ -1,0 +1,340 @@
+Selector: body (BODY)
+  Classes: inter_c5aa7146-module__HGRY9q__variable satoshifont_5144c20-module__izv76W__variable sksaucn
+  fontFamily: Inter, "Inter Fallback", sans-serif
+  fontSize: 16px
+  fontWeight: 400
+  color: rgb(0, 0, 0)
+  backgroundColor: rgba(0, 0, 0, 0)
+  lineHeight: normal
+  letterSpacing: normal
+  padding: 0px
+  margin: 0px
+  borderRadius: 0px
+  border: 0px none rgb(0, 0, 0)
+  boxShadow: none
+  w: 1440px
+  h: 900px
+  display: block
+  position: static
+  gap: normal
+
+Selector: header (HEADER)
+  Classes: wqm1wqv
+  fontFamily: Inter, "Inter Fallback", sans-serif
+  fontSize: 16px
+  fontWeight: 400
+  color: rgb(0, 0, 0)
+  backgroundColor: rgb(255, 255, 255)
+  lineHeight: normal
+  letterSpacing: normal
+  padding: 4px 8px
+  margin: 0px
+  borderRadius: 0px
+  border: 0px none rgb(0, 0, 0)
+  boxShadow: none
+  w: 1440px
+  h: 40px
+  display: flex
+  position: static
+  gap: 8px
+
+Selector: main (MAIN)
+  Classes: iqkyrea iv26ho1
+  fontFamily: Inter, "Inter Fallback", sans-serif
+  fontSize: 16px
+  fontWeight: 400
+  color: rgb(0, 0, 0)
+  backgroundColor: rgb(242, 245, 250)
+  lineHeight: normal
+  letterSpacing: normal
+  padding: 0px
+  margin: 0px
+  borderRadius: 0px 16px 0px 0px
+  border: 
+  boxShadow: none
+  w: 1400px
+  h: 860px
+  display: flex
+  position: relative
+  gap: normal
+
+Selector: footer (FOOTER)
+  Classes: s1x6epwc sqwb57s
+  fontFamily: Inter, "Inter Fallback", sans-serif
+  fontSize: 16px
+  fontWeight: 400
+  color: rgb(0, 0, 0)
+  backgroundColor: rgba(0, 0, 0, 0)
+  lineHeight: 16px
+  letterSpacing: normal
+  padding: 24px 0px 16px
+  margin: 0px
+  borderRadius: 0px
+  border: 0px none rgb(0, 0, 0)
+  boxShadow: none
+  w: 317px
+  h: 76px
+  display: block
+  position: static
+  gap: normal
+
+Selector: aside (ASIDE)
+  Classes: tklvlbw
+  fontFamily: Inter, "Inter Fallback", sans-serif
+  fontSize: 16px
+  fontWeight: 400
+  color: rgb(0, 0, 0)
+  backgroundColor: rgb(249, 250, 252)
+  lineHeight: normal
+  letterSpacing: normal
+  padding: 8px 0px
+  margin: 0px 0px 8px 8px
+  borderRadius: 8px
+  border: 0px none rgb(0, 0, 0)
+  boxShadow: rgba(84, 86, 102, 0.25) 0px 1px 2px 0px
+  w: 0px
+  h: 803px
+  display: flex
+  position: static
+  gap: normal
+
+Selector: aside (ASIDE)
+  Classes: s4u2ggh
+  fontFamily: Inter, "Inter Fallback", sans-serif
+  fontSize: 16px
+  fontWeight: 400
+  color: rgb(0, 0, 0)
+  backgroundColor: rgb(255, 255, 255)
+  lineHeight: normal
+  letterSpacing: normal
+  padding: 0px
+  margin: 0px
+  borderRadius: 0px
+  border: 0px none rgb(0, 0, 0)
+  boxShadow: none
+  w: 420px
+  h: 860px
+  display: flex
+  position: absolute
+  gap: normal
+
+Selector: nav (NAV)
+  Classes: r1uc8c6c
+  fontFamily: Inter, "Inter Fallback", sans-serif
+  fontSize: 16px
+  fontWeight: 400
+  color: rgb(0, 0, 0)
+  backgroundColor: rgba(0, 0, 0, 0)
+  lineHeight: normal
+  letterSpacing: normal
+  padding: 0px
+  margin: 0px 8px
+  borderRadius: 0px
+  border: 0px none rgb(0, 0, 0)
+  boxShadow: none
+  w: 1383px
+  h: 32px
+  display: block
+  position: relative
+  gap: normal
+
+Selector: h3 (H3)
+  Classes: p15hrwo8
+  fontFamily: inter
+  fontSize: 18px
+  fontWeight: 600
+  color: rgb(17, 18, 20)
+  backgroundColor: rgba(0, 0, 0, 0)
+  lineHeight: 24px
+  letterSpacing: normal
+  padding: 0px
+  margin: 4px 0px
+  borderRadius: 0px
+  border: 0px none rgb(17, 18, 20)
+  boxShadow: none
+  w: 288px
+  h: 24px
+  display: block
+  position: static
+  gap: normal
+
+Selector: p (P)
+  Classes: p1sq1gxk
+  fontFamily: inter
+  fontSize: 16px
+  fontWeight: 400
+  color: rgb(17, 18, 20)
+  backgroundColor: rgba(0, 0, 0, 0)
+  lineHeight: normal
+  letterSpacing: normal
+  padding: 0px
+  margin: 8px 0px 0px
+  borderRadius: 0px
+  border: 0px none rgb(17, 18, 20)
+  boxShadow: none
+  w: 288px
+  h: 59px
+  display: block
+  position: static
+  gap: normal
+
+Selector: p (P)
+  Classes: p1sq1gxk
+  fontFamily: inter
+  fontSize: 16px
+  fontWeight: 400
+  color: rgb(17, 18, 20)
+  backgroundColor: rgba(0, 0, 0, 0)
+  lineHeight: normal
+  letterSpacing: normal
+  padding: 0px
+  margin: 16px 0px 0px
+  borderRadius: 0px
+  border: 0px none rgb(17, 18, 20)
+  boxShadow: none
+  w: 288px
+  h: 20px
+  display: block
+  position: static
+  gap: normal
+
+Selector: span (SPAN)
+  Classes: f18m5lau
+  fontFamily: Inter, "Inter Fallback", sans-serif
+  fontSize: 16px
+  fontWeight: 400
+  color: rgb(0, 0, 0)
+  backgroundColor: rgb(242, 245, 250)
+  lineHeight: normal
+  letterSpacing: normal
+  padding: 4px
+  margin: 0px
+  borderRadius: 4px
+  border: 0px none rgb(0, 0, 0)
+  boxShadow: none
+  w: 24px
+  h: 24px
+  display: flex
+  position: static
+  gap: normal
+
+Selector: span (SPAN)
+  Classes: dnze4si b1xfjh6r
+  fontFamily: inter, sans-serif
+  fontSize: 16px
+  fontWeight: 400
+  color: rgb(17, 18, 20)
+  backgroundColor: rgba(0, 0, 0, 0)
+  lineHeight: 24px
+  letterSpacing: normal
+  padding: 0px
+  margin: 0px
+  borderRadius: 0px
+  border: 0px none rgb(17, 18, 20)
+  boxShadow: none
+  w: 412px
+  h: 24px
+  display: block
+  position: static
+  gap: normal
+
+Selector: a (A)
+  Classes: svjf4jh
+  fontFamily: Inter, "Inter Fallback", sans-serif
+  fontSize: 16px
+  fontWeight: 400
+  color: rgb(0, 0, 0)
+  backgroundColor: rgba(0, 0, 0, 0)
+  lineHeight: normal
+  letterSpacing: normal
+  padding: 0px
+  margin: 0px
+  borderRadius: 0px
+  border: 0px none rgb(0, 0, 0)
+  boxShadow: none
+  w: 24px
+  h: 24px
+  display: flex
+  position: static
+  gap: normal
+
+Selector: a (A)
+  Classes: 
+  fontFamily: inter, sans-serif
+  fontSize: 12px
+  fontWeight: 400
+  color: rgb(68, 74, 255)
+  backgroundColor: rgba(0, 0, 0, 0)
+  lineHeight: 16px
+  letterSpacing: normal
+  padding: 0px
+  margin: 0px
+  borderRadius: 0px
+  border: 0px none rgb(68, 74, 255)
+  boxShadow: none
+  w: 100px
+  h: 15px
+  display: inline
+  position: static
+  gap: normal
+
+Selector: button (BUTTON)
+  Classes: t1y0lue2 pb4tb73 b316d96 bp93l9m
+  fontFamily: inter
+  fontSize: 16px
+  fontWeight: 400
+  color: rgb(17, 18, 20)
+  backgroundColor: rgba(196, 203, 220, 0)
+  lineHeight: normal
+  letterSpacing: normal
+  padding: 0px
+  margin: 0px
+  borderRadius: 8px
+  border: 0px none rgba(0, 0, 0, 0)
+  boxShadow: none
+  w: 32px
+  h: 32px
+  display: flex
+  position: static
+  gap: normal
+
+Selector: input (INPUT)
+  Classes: s1v37e3g
+  fontFamily: inter, sans-serif
+  fontSize: 14px
+  fontWeight: 400
+  color: rgb(17, 18, 20)
+  backgroundColor: rgba(0, 0, 0, 0)
+  lineHeight: 18px
+  letterSpacing: normal
+  padding: 4px
+  margin: 0px
+  borderRadius: 4px
+  border: 0px none rgb(17, 18, 20)
+  boxShadow: none
+  w: 30px
+  h: 22px
+  display: block
+  position: static
+  gap: normal
+
+Selector: input (INPUT)
+  Classes: s1v37e3g
+  fontFamily: inter, sans-serif
+  fontSize: 14px
+  fontWeight: 400
+  color: rgb(17, 18, 20)
+  backgroundColor: rgba(0, 0, 0, 0)
+  lineHeight: 18px
+  letterSpacing: normal
+  padding: 4px
+  margin: 0px
+  borderRadius: 4px
+  border: 0px none rgb(17, 18, 20)
+  boxShadow: none
+  w: 50px
+  h: 22px
+  display: block
+  position: static
+  gap: normal
+
