@@ -141,41 +141,41 @@ export default function VipDetailPage({
             </div>
 
             {/* Compact info row */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               <div className="bg-white border border-neutral-300 rounded-lg p-4 flex items-center gap-4 shadow-tight hover:shadow-fluffy transition-shadow duration-300">
-                <div className="w-10 h-10 rounded-cta bg-neutral-100 flex items-center justify-center text-neutral-500">
+                <div className="w-10 h-10 rounded-cta bg-neutral-100 flex items-center justify-center text-neutral-500 flex-shrink-0">
                   <Building2 size={20} />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-0.5">Company</p>
-                  <p className="text-[15px] font-bold text-neutral-950 truncate">{vip.company}</p>
+                  <p className="text-[15px] font-bold text-neutral-950" title={vip.company}>{vip.company}</p>
                 </div>
               </div>
               <div className="bg-white border border-neutral-300 rounded-lg p-4 flex items-center gap-4 shadow-tight hover:shadow-fluffy transition-shadow duration-300">
-                <div className="w-10 h-10 rounded-cta bg-neutral-100 flex items-center justify-center text-neutral-500">
+                <div className="w-10 h-10 rounded-cta bg-neutral-100 flex items-center justify-center text-neutral-500 flex-shrink-0">
                   <Briefcase size={20} />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-0.5">Role</p>
-                  <p className="text-[15px] font-bold text-neutral-950 truncate">{vip.role}</p>
+                  <p className="text-[15px] font-bold text-neutral-950" title={vip.role}>{vip.role}</p>
                 </div>
               </div>
               <div className="bg-white border border-neutral-300 rounded-lg p-4 flex items-center gap-4 shadow-tight hover:shadow-fluffy transition-shadow duration-300">
-                <div className="w-10 h-10 rounded-cta bg-neutral-100 flex items-center justify-center text-neutral-500">
+                <div className="w-10 h-10 rounded-cta bg-neutral-100 flex items-center justify-center text-neutral-500 flex-shrink-0">
                   <DollarSign size={20} />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-0.5">AUM</p>
-                  <p className="text-[15px] font-bold text-status-green-700 truncate">{vip.aum}</p>
+                  <p className="text-[15px] font-bold text-status-green-700">{vip.aum}</p>
                 </div>
               </div>
               <div className="bg-white border border-neutral-300 rounded-lg p-4 flex items-center gap-4 shadow-tight hover:shadow-fluffy transition-shadow duration-300">
-                <div className="w-10 h-10 rounded-cta bg-neutral-100 flex items-center justify-center text-neutral-500">
+                <div className="w-10 h-10 rounded-cta bg-neutral-100 flex items-center justify-center text-neutral-500 flex-shrink-0">
                   <CalendarDays size={20} />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-0.5">Last Meeting</p>
-                  <p className="text-[15px] font-bold text-neutral-950 truncate">{formatDate(vip.lastMeeting)}</p>
+                  <p className="text-[15px] font-bold text-neutral-950">{formatDate(vip.lastMeeting)}</p>
                 </div>
               </div>
             </div>
