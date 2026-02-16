@@ -2,8 +2,8 @@ import type { CommentThread } from "@/lib/types";
 
 function firstNameFromFullName(fullName?: string | null): string {
   const safe = (fullName || "").trim();
-  if (!safe) return "Alexandra";
-  return safe.split(/\s+/)[0] || "Alexandra";
+  if (!safe) return "User";
+  return safe.split(/\s+/)[0] || "User";
 }
 
 function snippetFromText(text: string, maxLen: number): string {

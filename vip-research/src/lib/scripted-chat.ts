@@ -7,8 +7,8 @@ function normalize(s: string): string {
 }
 
 function firstName(fullName?: string): string {
-  if (!fullName) return "Alexandra";
-  return fullName.split(" ")[0] || "Alexandra";
+  if (!fullName) return "User";
+  return fullName.split(" ")[0] || "User";
 }
 
 const FALLBACK_SUMMARY_TEXT =

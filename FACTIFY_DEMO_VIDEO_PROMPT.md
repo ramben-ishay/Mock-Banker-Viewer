@@ -73,7 +73,7 @@ By the end of the video, the viewer should clearly believe:
 ## Characters / Perspectives
 
 - **On-screen banker persona**: Private Banker / Wealth Advisor (narrator refers to “I” as the banker user)
-  - In-comment author name shown in the viewer can appear as **Alexandra Whitfield** (advisor identity in demo UI).
+  - In-comment author name shown in the viewer appears as **Your Banker** (generic advisor identity in demo UI).
 - **VIP clients shown**:
   - **Fatima Al Rashid** (existing VIP; disengagement example)
   - **Alexandra Petrov** (new VIP added via CRM match + AI synthesis)

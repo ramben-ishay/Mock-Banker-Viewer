@@ -215,8 +215,8 @@ function appReducer(state: AppState, action: Action): AppState {
               {
                 id: `c-share-${Date.now()}-${idx}`,
                 author: {
-                  name: "Alexandra Whitfield",
-                  initials: "AW",
+                  name: "Your Banker",
+                  initials: "B",
                   role: "banker" as const,
                   color: "#444aff",
                 },
@@ -311,8 +311,8 @@ function appReducer(state: AppState, action: Action): AppState {
                 author: {
                   // The VIP is the "user" of the PDF viewer.
                   // Banker-authored messages should never render as "You Banker".
-                  name: "Alexandra Whitfield",
-                  initials: "AW",
+                  name: "Your Banker",
+                  initials: "B",
                   role: "banker" as const,
                   color: "#444aff",
                 },

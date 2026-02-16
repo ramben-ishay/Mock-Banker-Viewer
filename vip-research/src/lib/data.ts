@@ -1362,8 +1362,8 @@ export const COMMENT_THREADS: Record<string, CommentThread[]> = {
         {
           id: "c-1-1-1",
           author: {
-            name: "Alexandra Whitfield",
-            initials: "AW",
+            name: "Your Banker",
+            initials: "B",
             role: "banker",
             color: "#444aff",
           },
@@ -1384,8 +1384,8 @@ export const COMMENT_THREADS: Record<string, CommentThread[]> = {
         {
           id: "c-1-1-3",
           author: {
-            name: "Alexandra Whitfield",
-            initials: "AW",
+            name: "Your Banker",
+            initials: "B",
             role: "banker",
             color: "#444aff",
           },
@@ -1404,8 +1404,8 @@ export const COMMENT_THREADS: Record<string, CommentThread[]> = {
         {
           id: "c-1-2-1",
           author: {
-            name: "Alexandra Whitfield",
-            initials: "AW",
+            name: "Your Banker",
+            initials: "B",
             role: "banker",
             color: "#444aff",
           },
@@ -1437,8 +1437,8 @@ export const COMMENT_THREADS: Record<string, CommentThread[]> = {
         {
           id: "c-3-1-1",
           author: {
-            name: "Alexandra Whitfield",
-            initials: "AW",
+            name: "Your Banker",
+            initials: "B",
             role: "banker",
             color: "#444aff",
           },
@@ -1470,8 +1470,8 @@ export const COMMENT_THREADS: Record<string, CommentThread[]> = {
         {
           id: "c-4-1-1",
           author: {
-            name: "Alexandra Whitfield",
-            initials: "AW",
+            name: "Your Banker",
+            initials: "B",
             role: "banker",
             color: "#444aff",
           },
@@ -1503,8 +1503,8 @@ export const COMMENT_THREADS: Record<string, CommentThread[]> = {
         {
           id: "c-7-1-1",
           author: {
-            name: "Alexandra Whitfield",
-            initials: "AW",
+            name: "Your Banker",
+            initials: "B",
             role: "banker",
             color: "#444aff",
           },

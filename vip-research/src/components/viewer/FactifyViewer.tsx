@@ -1342,7 +1342,7 @@ function getAuthorDisplayName(
   vipMode: boolean
 ): string {
   if (!vipMode) return author.name;
-  return author.role === "vip" ? "You" : "Alexandra Whitfield";
+  return author.role === "vip" ? "You" : "Your Banker";
 }
 
 function shouldShowBankerBadge(
