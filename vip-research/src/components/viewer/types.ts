@@ -4,6 +4,13 @@ export interface ViewerCommentThread {
   id: string;
   quoteText: string;
   pageReference?: string;
+  pageNumber?: number;
+  highlightArea?: {
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+  };
   comments: {
     id: string;
     author: {
@@ -18,6 +25,10 @@ export interface ViewerCommentThread {
 }
 
 export interface FactifyViewerProps {
+  /** Document id used for demo scripts and cross-feature behavior */
+  docId?: string;
+  /** When true, treat the viewer as the VIP/customer view */
+  vipMode?: boolean;
   pdfUrl: string;
   documentTitle?: string;
   userName?: string;

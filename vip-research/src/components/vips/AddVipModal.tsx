@@ -224,7 +224,11 @@ export function AddVipModal({ isOpen, onClose }: AddVipModalProps) {
   };
 
   const handleNameKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Tab" && ghostText && matchingSuggestions.length > 0) {
+    // Demo-friendly: if user hits Tab immediately, accept the top suggestion (Alexandra).
+    if (e.key === "Tab" && !name.trim() && PREDEFINED_VIP_SUGGESTIONS.length > 0) {
+      e.preventDefault();
+      applyNameSelection(PREDEFINED_VIP_SUGGESTIONS[0]);
+    } else if (e.key === "Tab" && ghostText && matchingSuggestions.length > 0) {
       e.preventDefault();
       applyNameSelection(matchingSuggestions[highlightedIndex]);
     } else if (e.key === "ArrowDown" && showDropdown && matchingSuggestions.length > 0) {

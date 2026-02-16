@@ -99,6 +99,10 @@ export interface CommentThread {
   documentTitle: string;
   quoteText: string;
   pageReference?: string;
+  /** Optional page number for inline annotations in the viewer */
+  pageNumber?: number;
+  /** Optional highlight area for inline annotations in the viewer */
+  highlightArea?: HighlightArea;
   comments: Comment[];
 }
 
@@ -116,12 +120,27 @@ export interface HighlightArea {
   height: number;
 }
 
+/** Optional padding (in page %) applied around a computed highlight. */
+export interface HighlightPadding {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
+
 export interface WalkthroughStep {
   id: string;
   documentId: string;
   pageNumber: number;
   title: string;
   message: string;
+  /**
+   * Text anchor used to locate the precise region in the PDF text layer.
+   * If provided, the viewer will prefer this over static coordinates.
+   */
+  highlightText?: string;
+  /** Optional padding (in page %) to broaden the highlight region. */
+  highlightPadding?: HighlightPadding;
   /** Coordinates for the highlight overlay (percentages of the page) */
   highlightArea: HighlightArea;
 }
@@ -135,6 +154,10 @@ export interface WalkthroughStepTemplate {
   messageTemplate: string;
   /** Topics this step relates to (for matching against VIP interests) */
   relevantTopics: string[];
+  /** Text anchor used to locate the precise region in the PDF text layer. */
+  highlightText?: string;
+  /** Optional padding (in page %) to broaden the highlight region. */
+  highlightPadding?: HighlightPadding;
   /** Coordinates for the highlight overlay (percentages of the page) */
   highlightArea: HighlightArea;
 }

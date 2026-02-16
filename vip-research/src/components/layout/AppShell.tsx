@@ -11,13 +11,12 @@ import { motion, AnimatePresence } from "framer-motion";
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isViewerRoute = pathname.startsWith("/viewer");
-  const isLandingPage = pathname === "/";
   const shellStyle = { "--sidebar-width": "240px" } as React.CSSProperties;
 
   return (
     <AppProvider>
-      {isViewerRoute || isLandingPage ? (
-        /* Full screen viewer or landing page without sidebar chrome */
+      {isViewerRoute ? (
+        /* Full screen viewer without sidebar chrome */
         <motion.div
           key={pathname}
           initial={{ opacity: 0 }}

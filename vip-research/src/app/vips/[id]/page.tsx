@@ -189,7 +189,7 @@ export default function VipDetailPage({
                   <h4 className="text-base font-bold text-neutral-950">Reading Profile</h4>
                 </div>
                 <p className="text-[15px] text-neutral-700 leading-relaxed font-medium relative z-10 italic">
-                  "{vip.readingProfile}"
+                  &quot;{vip.readingProfile}&quot;
                 </p>
               </div>
 
@@ -270,7 +270,7 @@ export default function VipDetailPage({
                   Activity History
                 </h4>
                 <div className="bg-white border border-neutral-300 rounded-lg p-6 shadow-tight">
-                  <EngagementTimeline entries={timeline} />
+                  <EngagementTimeline entries={timeline} vipId={id} />
                 </div>
               </div>
             )}
@@ -293,6 +293,7 @@ export default function VipDetailPage({
                   <RecommendationCard
                     key={rec.id}
                     recommendation={rec}
+                    vipId={id}
                     onShare={() => setShareModalRec(rec)}
                     onDismiss={() => handleDismiss(rec.id)}
                   />

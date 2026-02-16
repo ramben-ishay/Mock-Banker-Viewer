@@ -1362,7 +1362,7 @@ export const COMMENT_THREADS: Record<string, CommentThread[]> = {
         {
           id: "c-1-1-1",
           author: {
-            name: "You",
+            name: "Your Banker",
             initials: "YB",
             role: "banker",
             color: "#444aff",
@@ -1384,7 +1384,7 @@ export const COMMENT_THREADS: Record<string, CommentThread[]> = {
         {
           id: "c-1-1-3",
           author: {
-            name: "You",
+            name: "Your Banker",
             initials: "YB",
             role: "banker",
             color: "#444aff",
@@ -1404,7 +1404,7 @@ export const COMMENT_THREADS: Record<string, CommentThread[]> = {
         {
           id: "c-1-2-1",
           author: {
-            name: "You",
+            name: "Your Banker",
             initials: "YB",
             role: "banker",
             color: "#444aff",
@@ -1437,7 +1437,7 @@ export const COMMENT_THREADS: Record<string, CommentThread[]> = {
         {
           id: "c-3-1-1",
           author: {
-            name: "You",
+            name: "Your Banker",
             initials: "YB",
             role: "banker",
             color: "#444aff",
@@ -1470,7 +1470,7 @@ export const COMMENT_THREADS: Record<string, CommentThread[]> = {
         {
           id: "c-4-1-1",
           author: {
-            name: "You",
+            name: "Your Banker",
             initials: "YB",
             role: "banker",
             color: "#444aff",
@@ -1503,7 +1503,7 @@ export const COMMENT_THREADS: Record<string, CommentThread[]> = {
         {
           id: "c-7-1-1",
           author: {
-            name: "You",
+            name: "Your Banker",
             initials: "YB",
             role: "banker",
             color: "#444aff",
@@ -1773,6 +1773,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Executive Summary",
       messageTemplate: "Based on your interest in {interest}, this executive overview highlights the selective overweight on memory and advanced logic exposed to data center and edge AI.",
       relevantTopics: ["Semiconductors", "AI chips"],
+      highlightText: QUOTE_SUGGESTIONS["doc-1"][0].quoteText,
       highlightArea: { top: 8, left: 8, width: 86, height: 12 },
     },
     {
@@ -1780,20 +1781,15 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Memory Cycle Recovery",
       messageTemplate: "Since you follow {interest} trends, note the memory cycle recovery phase with pricing power gradually returning to producers.",
       relevantTopics: ["AI chips", "Semiconductors"],
+      highlightText: QUOTE_SUGGESTIONS["doc-1"][1].quoteText,
       highlightArea: { top: 33, left: 8, width: 86, height: 14 },
     },
     {
       id: "wt-1-3", documentId: "doc-1", pageNumber: 3,
-      title: "Sector Recommendations",
-      messageTemplate: "Since you read the {context}, this section on sector recommendations and valuation provides context on how to position around the AI capex cycle.",
-      relevantTopics: ["AI chips", "Semiconductors"],
-      highlightArea: { top: 34, left: 8, width: 86, height: 12 },
-    },
-    {
-      id: "wt-1-4", documentId: "doc-1", pageNumber: 3,
       title: "Key Risks to Watch",
       messageTemplate: "Based on your portfolio exposure, these risk factors around {interest} slowdown and export controls could directly affect your positions.",
       relevantTopics: ["Semiconductors", "Export controls"],
+      highlightText: QUOTE_SUGGESTIONS["doc-1"][2].quoteText,
       highlightArea: { top: 72, left: 8, width: 86, height: 14 },
     },
   ],
@@ -1803,6 +1799,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "The $500B Capex Estimate",
       messageTemplate: "Based on your interest in {interest}, this headline projection of $500 billion in AI infrastructure spending over 2025 to 2028 sets the investment framework.",
       relevantTopics: ["Cloud infrastructure", "Capex"],
+      highlightText: QUOTE_SUGGESTIONS["doc-2"][0].quoteText,
       highlightArea: { top: 10, left: 10, width: 85, height: 16 },
     },
     {
@@ -1810,6 +1807,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "GPU and Accelerator Content Growth",
       messageTemplate: "Since you track {interest}, this section on GPUs and custom accelerators capturing the largest share of incremental spend is directly relevant.",
       relevantTopics: ["AI chips", "Cloud infrastructure"],
+      highlightText: QUOTE_SUGGESTIONS["doc-2"][1].quoteText,
       highlightArea: { top: 35, left: 10, width: 85, height: 14 },
     },
     {
@@ -1817,6 +1815,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Data Center Power and Cooling",
       messageTemplate: "Based on your interest in {interest}, the grid connectivity and cooling technology analysis highlights critical infrastructure bottlenecks.",
       relevantTopics: ["Data centers", "Cloud infrastructure"],
+      highlightText: QUOTE_SUGGESTIONS["doc-2"][2].quoteText,
       highlightArea: { top: 18, left: 10, width: 85, height: 22 },
     },
   ],
@@ -1826,6 +1825,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Export Controls Overview",
       messageTemplate: "Based on your interest in {interest}, this urgent assessment of US export controls on advanced semiconductors requires immediate attention.",
       relevantTopics: ["Geopolitics", "Export controls"],
+      highlightText: QUOTE_SUGGESTIONS["doc-3"][0].quoteText,
       highlightArea: { top: 8, left: 10, width: 85, height: 20 },
     },
     {
@@ -1833,6 +1833,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Revenue Impact by Sector",
       messageTemplate: "Since you read the {context}, this breakdown of revenue exposure for equipment and fabless vendors shows the direct financial impact.",
       relevantTopics: ["Semiconductors", "Export controls"],
+      highlightText: QUOTE_SUGGESTIONS["doc-3"][1].quoteText,
       highlightArea: { top: 38, left: 10, width: 85, height: 16 },
     },
     {
@@ -1840,6 +1841,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Supply Chain Ripple Effects",
       messageTemplate: "Based on your interest in {interest}, the analysis of allied countries potentially adopting similar controls could broaden the impact over time.",
       relevantTopics: ["China tech", "Geopolitics"],
+      highlightText: QUOTE_SUGGESTIONS["doc-3"][2].quoteText,
       highlightArea: { top: 22, left: 10, width: 85, height: 18 },
     },
   ],
@@ -1849,6 +1851,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Climate Legislation Implementation",
       messageTemplate: "Based on your interest in {interest}, the pace of climate legislation implementation in the US and Europe is driving project pipelines at an accelerating rate.",
       relevantTopics: ["ESG", "Clean energy"],
+      highlightText: QUOTE_SUGGESTIONS["doc-4"][0].quoteText,
       highlightArea: { top: 10, left: 10, width: 85, height: 18 },
     },
     {
@@ -1856,6 +1859,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Battery Storage Outlook",
       messageTemplate: "Since you track {interest}, storage is becoming critical for grid stability. This section reviews the outlook for batteries and alternative storage technologies.",
       relevantTopics: ["Clean energy", "ESG"],
+      highlightText: QUOTE_SUGGESTIONS["doc-4"][1].quoteText,
       highlightArea: { top: 35, left: 10, width: 85, height: 16 },
     },
     {
@@ -1863,6 +1867,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Grid Infrastructure Spending",
       messageTemplate: "Based on your interest in {interest}, grid investment is a major theme with aging infrastructure and renewable integration driving significant capital expenditure.",
       relevantTopics: ["Green bonds", "ESG"],
+      highlightText: QUOTE_SUGGESTIONS["doc-4"][2].quoteText,
       highlightArea: { top: 15, left: 10, width: 85, height: 20 },
     },
   ],
@@ -1872,6 +1877,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "EM Easing Cycle Thesis",
       messageTemplate: "Based on your interest in {interest}, the base case of gradual easing in the US and Europe with selective value in hard currency high yield sets the macro backdrop.",
       relevantTopics: ["EM debt", "Bonds"],
+      highlightText: QUOTE_SUGGESTIONS["doc-5"][0].quoteText,
       highlightArea: { top: 12, left: 10, width: 85, height: 20 },
     },
     {
@@ -1879,6 +1885,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Country and Segment Overweights",
       messageTemplate: "Since you read the {context}, these overweight positions in Latin America and EMEA complement your broader fixed income view.",
       relevantTopics: ["Bonds", "EM debt"],
+      highlightText: QUOTE_SUGGESTIONS["doc-5"][1].quoteText,
       highlightArea: { top: 8, left: 10, width: 85, height: 22 },
     },
     {
@@ -1886,6 +1893,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Key Risk Scenarios",
       messageTemplate: "Based on your {interest} focus, the risk analysis around a hawkish Fed and sovereign stress in high yield names deserves careful review.",
       relevantTopics: ["Bonds", "Fixed income"],
+      highlightText: QUOTE_SUGGESTIONS["doc-5"][2].quoteText,
       highlightArea: { top: 45, left: 10, width: 85, height: 18 },
     },
   ],
@@ -1895,6 +1903,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "CET1 Capital Adequacy",
       messageTemplate: "Based on your interest in {interest}, the stress test results show most large banks maintain CET1 ratios above requirements, but dispersion across institutions is meaningful.",
       relevantTopics: ["European banking", "Bonds"],
+      highlightText: QUOTE_SUGGESTIONS["doc-6"][0].quoteText,
       highlightArea: { top: 10, left: 10, width: 85, height: 20 },
     },
     {
@@ -1902,6 +1911,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "NII Plateau and Fee Income",
       messageTemplate: "Since you track {interest} and banking profitability, NII is expected to plateau in 2026 as rate cuts take effect. Fee income and cost management become key differentiators.",
       relevantTopics: ["Rates", "European banking"],
+      highlightText: QUOTE_SUGGESTIONS["doc-6"][1].quoteText,
       highlightArea: { top: 20, left: 10, width: 85, height: 18 },
     },
     {
@@ -1909,6 +1919,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Top Bank Picks",
       messageTemplate: "Based on your interest in {interest}, the report favors banks with strong CET1 generation and diversified revenue, concentrated in northern European markets.",
       relevantTopics: ["Credit quality", "European banking"],
+      highlightText: QUOTE_SUGGESTIONS["doc-6"][2].quoteText,
       highlightArea: { top: 28, left: 10, width: 85, height: 20 },
     },
   ],
@@ -1918,6 +1929,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Office Cap Rate Expansion",
       messageTemplate: "Based on your interest in {interest}, US office cap rates have expanded 120 to 180 basis points from cycle lows with further adjustment likely.",
       relevantTopics: ["Real estate", "Commercial real estate"],
+      highlightText: QUOTE_SUGGESTIONS["doc-7"][0].quoteText,
       highlightArea: { top: 8, left: 10, width: 85, height: 18 },
     },
     {
@@ -1925,6 +1937,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Remote Work Impact",
       messageTemplate: "Since you track {interest}, hybrid work patterns have structurally reduced net absorption in CBDs with limited near term recovery expected.",
       relevantTopics: ["Commercial real estate", "Real estate"],
+      highlightText: QUOTE_SUGGESTIONS["doc-7"][1].quoteText,
       highlightArea: { top: 35, left: 10, width: 85, height: 16 },
     },
     {
@@ -1932,6 +1945,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Stabilization Timeline",
       messageTemplate: "Since you read the {context}, data center, logistics, and multifamily segments show resilience within the broader CRE repricing cycle.",
       relevantTopics: ["Real estate", "Commercial real estate"],
+      highlightText: QUOTE_SUGGESTIONS["doc-7"][2].quoteText,
       highlightArea: { top: 22, left: 10, width: 85, height: 22 },
     },
   ],
@@ -1941,6 +1955,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "$215B Market Sizing",
       messageTemplate: "Based on your interest in {interest}, the global market is estimated at approximately $215 billion in 2026 with 10% year over year growth.",
       relevantTopics: ["Cybersecurity", "Cloud infrastructure"],
+      highlightText: QUOTE_SUGGESTIONS["doc-8"][0].quoteText,
       highlightArea: { top: 10, left: 10, width: 85, height: 16 },
     },
     {
@@ -1948,6 +1963,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "AI Powered Threat Landscape",
       messageTemplate: "Since you follow {interest} trends, adversarial AI and AI powered threats are driving investment in advanced detection and response capabilities.",
       relevantTopics: ["AI chips", "Cybersecurity"],
+      highlightText: QUOTE_SUGGESTIONS["doc-8"][1].quoteText,
       highlightArea: { top: 35, left: 10, width: 85, height: 18 },
     },
     {
@@ -1955,6 +1971,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Cloud Security Growth at 18%",
       messageTemplate: "Based on your interest in {interest}, cloud security spending growth at 18% outpaces the broader market with zero trust becoming the standard framework.",
       relevantTopics: ["Cloud infrastructure", "Cybersecurity"],
+      highlightText: QUOTE_SUGGESTIONS["doc-8"][2].quoteText,
       highlightArea: { top: 15, left: 10, width: 85, height: 20 },
     },
   ],
@@ -1964,6 +1981,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Brent Price Projection",
       messageTemplate: "Based on your interest in {interest}, the base case projects Brent in the $72 to $82 range for 2026 with downside risk from weaker growth.",
       relevantTopics: ["Oil and gas", "Commodities"],
+      highlightText: QUOTE_SUGGESTIONS["doc-9"][0].quoteText,
       highlightArea: { top: 10, left: 10, width: 85, height: 18 },
     },
     {
@@ -1971,6 +1989,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Supply vs Demand Balance",
       messageTemplate: "Since you track {interest}, global oil supply growth of approximately 1.2 million barrels per day versus demand growth creates a slight surplus.",
       relevantTopics: ["Commodities", "Oil and gas"],
+      highlightText: QUOTE_SUGGESTIONS["doc-9"][1].quoteText,
       highlightArea: { top: 38, left: 10, width: 85, height: 16 },
     },
     {
@@ -1978,6 +1997,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Peak Oil Demand Approaching",
       messageTemplate: "Based on your interest in {interest}, peak oil demand is approaching but the plateau period could extend for several years.",
       relevantTopics: ["Energy transition", "Oil and gas"],
+      highlightText: QUOTE_SUGGESTIONS["doc-9"][2].quoteText,
       highlightArea: { top: 20, left: 10, width: 85, height: 20 },
     },
   ],
@@ -1987,6 +2007,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "BOJ Rate Path",
       messageTemplate: "Based on your interest in {interest} and rates, the base case projects one to two additional rate increases bringing the policy rate to approximately 0.75% by year end.",
       relevantTopics: ["Japan", "Rates"],
+      highlightText: QUOTE_SUGGESTIONS["doc-10"][0].quoteText,
       highlightArea: { top: 10, left: 10, width: 85, height: 18 },
     },
     {
@@ -1994,6 +2015,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Yen Strengthening to 140 to 145",
       messageTemplate: "Since you follow {interest} markets, the yen is projected to strengthen toward 140 to 145 against the dollar. Carry trade unwinds remain a source of episodic volatility.",
       relevantTopics: ["FX", "Japan"],
+      highlightText: QUOTE_SUGGESTIONS["doc-10"][1].quoteText,
       highlightArea: { top: 15, left: 10, width: 85, height: 20 },
     },
     {
@@ -2001,6 +2023,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Nikkei Equity Positioning",
       messageTemplate: "Based on your interest in {interest}, corporate governance reform and shareholder return programs continue to support the Nikkei in 2026.",
       relevantTopics: ["Japanese equities", "Japan"],
+      highlightText: QUOTE_SUGGESTIONS["doc-10"][2].quoteText,
       highlightArea: { top: 48, left: 10, width: 85, height: 18 },
     },
   ],
@@ -2010,6 +2033,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "GLP 1 Market Exceeding $80B",
       messageTemplate: "Based on your interest in {interest}, the global GLP 1 market could exceed $80 billion by 2028 driven by expanding indications and improved access.",
       relevantTopics: ["Healthcare", "Biotech"],
+      highlightText: QUOTE_SUGGESTIONS["doc-11"][0].quoteText,
       highlightArea: { top: 12, left: 10, width: 85, height: 16 },
     },
     {
@@ -2017,6 +2041,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Pharma Pipeline Outlook",
       messageTemplate: "Since you track {interest}, the report maintains a constructive stance on diversified pharma with strong pipelines and sees selective value in mid cap names.",
       relevantTopics: ["Biotech", "Healthcare"],
+      highlightText: QUOTE_SUGGESTIONS["doc-11"][1].quoteText,
       highlightArea: { top: 38, left: 10, width: 85, height: 18 },
     },
     {
@@ -2024,6 +2049,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "M&A Acceleration",
       messageTemplate: "Based on your interest in {interest}, activity has picked up driven by patent cliff exposure and the need to replenish pipelines.",
       relevantTopics: ["Pharma M&A", "Healthcare"],
+      highlightText: QUOTE_SUGGESTIONS["doc-11"][2].quoteText,
       highlightArea: { top: 20, left: 10, width: 85, height: 20 },
     },
   ],
@@ -2033,6 +2059,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Bitcoin ETF Inflows at $60B+",
       messageTemplate: "Based on your interest in {interest}, spot Bitcoin ETFs have attracted over $60 billion in cumulative net inflows since launch.",
       relevantTopics: ["Crypto", "Digital assets"],
+      highlightText: QUOTE_SUGGESTIONS["doc-12"][0].quoteText,
       highlightArea: { top: 10, left: 10, width: 85, height: 16 },
     },
     {
@@ -2040,6 +2067,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Stablecoin Market at $200B",
       messageTemplate: "Since you follow {interest}, the stablecoin market has exceeded $200 billion with growing use in cross border payments.",
       relevantTopics: ["Digital assets", "Crypto"],
+      highlightText: QUOTE_SUGGESTIONS["doc-12"][1].quoteText,
       highlightArea: { top: 38, left: 10, width: 85, height: 18 },
     },
     {
@@ -2047,6 +2075,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Institutional Allocation Framework",
       messageTemplate: "Based on your {context}, the crypto allocation framework treats it as a satellite position with sizing reflecting higher volatility.",
       relevantTopics: ["Portfolio diversification", "Crypto"],
+      highlightText: QUOTE_SUGGESTIONS["doc-12"][2].quoteText,
       highlightArea: { top: 22, left: 10, width: 85, height: 22 },
     },
   ],
@@ -2056,6 +2085,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Quantum Commercialization Timeline",
       messageTemplate: "Based on your interest in {interest}, quantum computing is transitioning from research to early stage commercial technology with hardware milestones accelerating.",
       relevantTopics: ["Emerging tech", "Quantum computing"],
+      highlightText: QUOTE_SUGGESTIONS["doc-13"][0].quoteText,
       highlightArea: { top: 10, left: 10, width: 85, height: 20 },
     },
     {
@@ -2063,6 +2093,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Financial Services Use Cases",
       messageTemplate: "Since you work in {interest}, financial services firms are exploring quantum for portfolio optimization, risk simulation, and fraud detection.",
       relevantTopics: ["Investment management", "Quantum computing"],
+      highlightText: QUOTE_SUGGESTIONS["doc-13"][1].quoteText,
       highlightArea: { top: 15, left: 10, width: 85, height: 22 },
     },
     {
@@ -2070,6 +2101,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "2028 to 2030 Impact Horizon",
       messageTemplate: "Based on your {interest} timeline, initial commercial impact is expected in select use cases by 2028 to 2030 with broader adoption following.",
       relevantTopics: ["Technology investment", "Emerging tech"],
+      highlightText: QUOTE_SUGGESTIONS["doc-13"][2].quoteText,
       highlightArea: { top: 50, left: 10, width: 85, height: 18 },
     },
   ],
@@ -2079,6 +2111,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Credit Card Delinquency at 2.8%",
       messageTemplate: "Based on your interest in {interest}, 30+ day delinquency rates have risen to approximately 2.8%, modestly above pre pandemic norms.",
       relevantTopics: ["Consumer credit", "Macro"],
+      highlightText: QUOTE_SUGGESTIONS["doc-14"][0].quoteText,
       highlightArea: { top: 10, left: 10, width: 85, height: 18 },
     },
     {
@@ -2086,6 +2119,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Subprime Auto Stress",
       messageTemplate: "Since you track {interest}, subprime auto delinquencies have exceeded 2019 readings reflecting the impact of higher rates and affordability pressure.",
       relevantTopics: ["Auto lending", "Consumer credit"],
+      highlightText: QUOTE_SUGGESTIONS["doc-14"][1].quoteText,
       highlightArea: { top: 38, left: 10, width: 85, height: 16 },
     },
     {
@@ -2093,6 +2127,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Labor Market Soft Landing",
       messageTemplate: "Based on your {interest}, the soft landing projection with unemployment at 4.0 to 4.4% provides context for your credit positioning.",
       relevantTopics: ["Macro outlook", "Consumer credit"],
+      highlightText: QUOTE_SUGGESTIONS["doc-14"][2].quoteText,
       highlightArea: { top: 22, left: 10, width: 85, height: 20 },
     },
   ],
@@ -2102,6 +2137,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "IIJA Implementation at 35%",
       messageTemplate: "Based on your interest in {interest}, approximately 35% of total authorized IIJA funding has been obligated with disbursement rates improving.",
       relevantTopics: ["US infrastructure", "Infrastructure"],
+      highlightText: QUOTE_SUGGESTIONS["doc-15"][0].quoteText,
       highlightArea: { top: 10, left: 10, width: 85, height: 18 },
     },
     {
@@ -2109,6 +2145,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "Multiyear Growth Cycle",
       messageTemplate: "Since you follow {interest}, the spending ramp is still in early stages with significant backlogs supporting a multiyear growth cycle.",
       relevantTopics: ["Construction", "Industrials"],
+      highlightText: QUOTE_SUGGESTIONS["doc-15"][1].quoteText,
       highlightArea: { top: 38, left: 10, width: 85, height: 20 },
     },
     {
@@ -2116,6 +2153,7 @@ export const WALKTHROUGH_TEMPLATES: Record<string, WalkthroughStepTemplate[]> = 
       title: "$250B+ Manufacturing Construction",
       messageTemplate: "Based on your interest in {interest}, over $250 billion in manufacturing construction has been announced since 2022 with a significant share tied to federal incentives.",
       relevantTopics: ["Reshoring", "US infrastructure"],
+      highlightText: QUOTE_SUGGESTIONS["doc-15"][2].quoteText,
       highlightArea: { top: 15, left: 10, width: 85, height: 22 },
     },
   ],
@@ -2189,6 +2227,8 @@ export function personalizeWalkthroughSteps(docId: string, vipId: string | null)
       pageNumber: template.pageNumber,
       title: template.title,
       message: message,
+      highlightText: template.highlightText,
+      highlightPadding: template.highlightPadding,
       highlightArea: template.highlightArea,
     };
   });

@@ -7,11 +7,13 @@ import { StarsIcon } from "./Icons";
 interface FactificationAnimationProps {
   onComplete: () => void;
   documentTitle?: string;
+  documentCount?: number;
 }
 
 export function FactificationAnimation({
   onComplete,
   documentTitle = "Constructing_Policies_and_Procedures_(Rev_16)",
+  documentCount = 1,
 }: FactificationAnimationProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -31,7 +33,7 @@ export function FactificationAnimation({
         <div className="flex items-center gap-3">
           <div className="w-2 h-2 rounded-full bg-brand-500 animate-pulse" />
           <span className="text-xl font-bold font-[family-name:var(--font-heading)] text-neutral-950 tracking-tight">
-            AI is analyzing your document
+            AI is analyzing {documentCount} {documentCount === 1 ? "document" : "documents"}
           </span>
         </div>
         <p className="text-sm font-medium text-neutral-600 uppercase tracking-[0.2em]">
@@ -108,7 +110,7 @@ export function FactificationAnimation({
         </div>
       </div>
 
-      {/* Floating Sparkles/Stars */}
+      {/* Floating Sparkles/Stars — positioned close to the document */}
       <motion.div
         className="absolute"
         animate={{
@@ -116,7 +118,7 @@ export function FactificationAnimation({
           opacity: [0.5, 1, 0.5],
         }}
         transition={{ duration: 2, repeat: Infinity }}
-        style={{ top: "20%", right: "20%" }}
+        style={{ top: "calc(50% - 28vh)", right: "calc(50% - 340px)" }}
       >
         <StarsIcon className="w-8 h-8 text-brand-300" />
       </motion.div>
@@ -127,7 +129,7 @@ export function FactificationAnimation({
           opacity: [0.3, 0.8, 0.3],
         }}
         transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
-        style={{ bottom: "25%", left: "15%" }}
+        style={{ bottom: "calc(50% - 26vh)", left: "calc(50% - 330px)" }}
       >
         <StarsIcon className="w-6 h-6 text-brand-200" />
       </motion.div>

@@ -19,9 +19,10 @@ const actionConfig: Record<
 
 interface EngagementTimelineProps {
   entries: TimelineEntry[];
+  vipId?: string;
 }
 
-export function EngagementTimeline({ entries }: EngagementTimelineProps) {
+export function EngagementTimeline({ entries, vipId }: EngagementTimelineProps) {
   return (
     <div className="relative">
       {/* Vertical line with gradient */}
@@ -64,7 +65,7 @@ export function EngagementTimeline({ entries }: EngagementTimelineProps) {
                   </Badge>
                 </div>
                 <a
-                  href={`/viewer/${entry.documentId}`}
+                  href={`/viewer/${entry.documentId}${vipId ? `?vipId=${encodeURIComponent(vipId)}` : ""}`}
                   className="text-[15px] font-bold text-neutral-950 hover:text-brand-500 transition-colors flex items-center gap-2 group/link tracking-tight"
                 >
                   {entry.documentTitle}

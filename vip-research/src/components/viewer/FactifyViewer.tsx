@@ -10,6 +10,7 @@
 
 import {
   useState,
+  useMemo,
   useCallback,
   useRef,
   useEffect,
@@ -20,8 +21,9 @@ import {
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import type { WalkthroughStep } from "@/lib/types";
+import type { HighlightArea, HighlightPadding, WalkthroughStep } from "@/lib/types";
 import type { FactifyViewerProps, ViewerCommentThread } from "./types";
+import { getChatResponse, getChatSuggestions, getDocumentSummary } from "@/lib/scripted-chat";
 
 import {
   StarsIcon,
@@ -102,6 +104,8 @@ function titleFromUrl(url: string): string {
 // ======================== MAIN COMPONENT ========================
 
 export function FactifyViewer({
+  docId,
+  vipMode = false,
   pdfUrl,
   documentTitle,
   userName = "User",
@@ -124,6 +128,7 @@ export function FactifyViewer({
   const [showSearch, setShowSearch] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [pdfError, setPdfError] = useState<string | null>(null);
+  const [focusThreadId] = useState<string | null>(null);
 
   // Walkthrough state
   const [wtActive, setWtActive] = useState(false);
@@ -193,26 +198,224 @@ export function FactifyViewer({
   // Walkthrough navigation
   const currentWtStep = walkthroughSteps[wtStepIndex] ?? null;
 
+  type WalkthroughTarget = {
+    pageNumber: number;
+    highlightArea: HighlightArea;
+    source: "computed" | "template";
+  };
+  const [wtTargets, setWtTargets] = useState<Record<string, WalkthroughTarget>>({});
+
+  const defaultPadding = useMemo<HighlightPadding>(
+    () => ({ top: 2, right: 2, bottom: 2, left: 2 }),
+    []
+  );
+
+  const getEffectiveTarget = useCallback(
+    (step: WalkthroughStep): WalkthroughTarget => {
+      const target = wtTargets[step.id];
+      if (target) return target;
+      return {
+        pageNumber: step.pageNumber,
+        highlightArea: step.highlightArea,
+        source: "template",
+      };
+    },
+    [wtTargets]
+  );
+
+  const normalizeForMatch = useCallback((s: string): string => {
+    return (
+      s
+        .toLowerCase()
+        // normalize common punctuation variants
+        .replace(/[\u2018\u2019]/g, "'")
+        .replace(/[\u201C\u201D]/g, '"')
+        // replace most punctuation with spaces but keep some finance symbols
+        .replace(/[^a-z0-9$%.\-+ ]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim()
+    );
+  }, []);
+
+  const computeHighlightOnPage = useCallback(
+    (
+      pageEl: HTMLElement,
+      highlightText: string,
+      padding: HighlightPadding
+    ): HighlightArea | null => {
+      const spanEls = Array.from(pageEl.querySelectorAll(".textLayer span")) as HTMLSpanElement[];
+      if (spanEls.length === 0) return null;
+
+      // Build a normalized string from spans while keeping span->index ranges.
+      const parts: Array<{ el: HTMLSpanElement; start: number; end: number; text: string }> = [];
+      let full = "";
+      for (const el of spanEls) {
+        const raw = el.textContent || "";
+        const norm = normalizeForMatch(raw);
+        if (!norm) continue;
+        const start = full.length;
+        full += norm + " ";
+        const end = full.length;
+        parts.push({ el, start, end, text: norm });
+      }
+      const needle = normalizeForMatch(highlightText);
+      if (!needle || !full) return null;
+
+      const idx = full.indexOf(needle);
+      let matched: HTMLSpanElement[] = [];
+
+      if (idx >= 0) {
+        const endIdx = idx + needle.length;
+        matched = parts.filter((p) => p.end > idx && p.start < endIdx).map((p) => p.el);
+      } else {
+        // Fallback: token-based match. Useful when PDF text differs slightly
+        // (hyphenation, range formatting, punctuation differences).
+        const stop = new Set([
+          "the",
+          "and",
+          "or",
+          "to",
+          "of",
+          "in",
+          "a",
+          "an",
+          "for",
+          "with",
+          "our",
+          "we",
+          "is",
+          "are",
+          "as",
+          "on",
+          "at",
+          "by",
+          "from",
+          "that",
+          "this",
+          "it",
+          "be",
+        ]);
+        const rawTokens = needle.split(" ").filter(Boolean);
+        const tokens = Array.from(
+          new Set(
+            rawTokens.filter((t) => (t.length >= 4 || /\d/.test(t)) && !stop.has(t))
+          )
+        );
+
+        // Prioritize numeric tokens and longer tokens.
+        tokens.sort((a, b) => {
+          const aNum = /\d/.test(a) ? 1 : 0;
+          const bNum = /\d/.test(b) ? 1 : 0;
+          if (aNum !== bNum) return bNum - aNum;
+          return b.length - a.length;
+        });
+        const important = tokens.slice(0, 10);
+        const minNeeded = Math.min(4, important.length);
+        const numericImportant = important.filter((t) => /\d/.test(t));
+        const minNumericNeeded =
+          numericImportant.length >= 2 ? 2 : numericImportant.length >= 1 ? 1 : 0;
+
+        if (important.length > 0) {
+          let best: { start: number; end: number; spanCount: number } | null = null;
+
+          for (let start = 0; start < parts.length; start++) {
+            let found = 0;
+            let foundNumeric = 0;
+            const foundSet = new Set<string>();
+            for (let end = start; end < parts.length && end < start + 220; end++) {
+              const t = parts[end].text;
+              for (const tok of important) {
+                if (!foundSet.has(tok) && t.includes(tok)) {
+                  foundSet.add(tok);
+                  found += 1;
+                  if (/\d/.test(tok)) foundNumeric += 1;
+                }
+              }
+              if (found >= minNeeded && foundNumeric >= minNumericNeeded) {
+                const spanCount = end - start + 1;
+                if (!best || spanCount < best.spanCount) {
+                  best = { start, end, spanCount };
+                }
+                break;
+              }
+            }
+          }
+
+          if (best) {
+            matched = parts.slice(best.start, best.end + 1).map((p) => p.el);
+          }
+        }
+      }
+
+      if (matched.length === 0) return null;
+
+      const pageRect = pageEl.getBoundingClientRect();
+      if (!pageRect.width || !pageRect.height) return null;
+
+      let minLeft = Number.POSITIVE_INFINITY;
+      let minTop = Number.POSITIVE_INFINITY;
+      let maxRight = Number.NEGATIVE_INFINITY;
+      let maxBottom = Number.NEGATIVE_INFINITY;
+
+      for (const el of matched) {
+        const r = el.getBoundingClientRect();
+        if (!r.width && !r.height) continue;
+        minLeft = Math.min(minLeft, r.left);
+        minTop = Math.min(minTop, r.top);
+        maxRight = Math.max(maxRight, r.right);
+        maxBottom = Math.max(maxBottom, r.bottom);
+      }
+
+      if (!Number.isFinite(minLeft) || !Number.isFinite(minTop)) return null;
+
+      let topPct = ((minTop - pageRect.top) / pageRect.height) * 100;
+      let leftPct = ((minLeft - pageRect.left) / pageRect.width) * 100;
+      let bottomPct = ((maxBottom - pageRect.top) / pageRect.height) * 100;
+      let rightPct = ((maxRight - pageRect.left) / pageRect.width) * 100;
+
+      // Apply padding (percentages of the page)
+      topPct -= padding.top;
+      leftPct -= padding.left;
+      bottomPct += padding.bottom;
+      rightPct += padding.right;
+
+      // Clamp into [0, 100]
+      topPct = Math.max(0, Math.min(100, topPct));
+      leftPct = Math.max(0, Math.min(100, leftPct));
+      bottomPct = Math.max(0, Math.min(100, bottomPct));
+      rightPct = Math.max(0, Math.min(100, rightPct));
+
+      const widthPct = Math.max(1, rightPct - leftPct);
+      const heightPct = Math.max(1, bottomPct - topPct);
+
+      return { top: topPct, left: leftPct, width: widthPct, height: heightPct };
+    },
+    [normalizeForMatch]
+  );
+
   const scrollToWtStep = useCallback(
     (stepIndex: number) => {
       const step = walkthroughSteps[stepIndex];
       if (!step || !pdfScrollRef.current) return;
       const pages = pdfScrollRef.current.querySelectorAll(".fv-pdf-page");
-      const targetPage = pages[step.pageNumber - 1] as HTMLElement;
+      const target = getEffectiveTarget(step);
+      const targetPage = pages[target.pageNumber - 1] as HTMLElement;
       if (targetPage) {
         const container = pdfScrollRef.current;
         const pageHeight = targetPage.offsetHeight;
         const viewportHeight = container.offsetHeight;
-        const highlightYInPage = (step.highlightArea.top / 100) * pageHeight;
+        const highlightYInPage = (target.highlightArea.top / 100) * pageHeight;
         const pageOffsetTop = targetPage.offsetTop;
 
         // Target scroll to center highlight at ~30% from top of viewport
         const targetScrollTop =
           pageOffsetTop + highlightYInPage - viewportHeight * 0.3;
 
+        // Use instant scrolling for determinism and to avoid cases where
+        // smooth scrolling doesn't reliably bring the highlight into view.
         container.scrollTo({
           top: Math.max(0, targetScrollTop),
-          behavior: "smooth",
+          behavior: "auto",
         });
 
         if (!isMobile) {
@@ -230,8 +433,97 @@ export function FactifyViewer({
         }
       }
     },
-    [walkthroughSteps, isMobile]
+    [walkthroughSteps, isMobile, getEffectiveTarget]
   );
+
+  // Compute a precise target (page + highlight area) for the current step.
+  // If the configured pageNumber is wrong, we scan other pages to find the text anchor.
+  useEffect(() => {
+    if (!wtActive) return;
+    const step = currentWtStep;
+    if (!step) return;
+    if (!step.highlightText) return;
+    // Capture after the guard so TypeScript knows it's a string in async closures.
+    const highlightText = step.highlightText;
+    if (!pdfScrollRef.current) return;
+
+    // If we already computed a target for this step, don't redo it.
+    if (wtTargets[step.id]?.source === "computed") return;
+
+    let cancelled = false;
+    const container = pdfScrollRef.current;
+
+    const run = async () => {
+      const padding = step.highlightPadding ?? defaultPadding;
+
+      // Retry because react-pdf text layers render async.
+      for (let attempt = 0; attempt < 80 && !cancelled; attempt++) {
+        const pages = Array.from(container.querySelectorAll(".fv-pdf-page")) as HTMLElement[];
+        if (pages.length === 0) {
+          await new Promise((r) => setTimeout(r, 150));
+          continue;
+        }
+
+        // Prefer searching the configured page first, then fall back to scanning.
+        const preferredIdx = Math.max(0, Math.min(pages.length - 1, step.pageNumber - 1));
+        const searchOrder: number[] = [
+          preferredIdx,
+          ...pages.map((_, i) => i).filter((i) => i !== preferredIdx),
+        ];
+
+        for (const pageIdx of searchOrder) {
+          const pageEl = pages[pageIdx];
+          if (!pageEl) continue;
+          const area = computeHighlightOnPage(pageEl, highlightText, padding);
+          if (area) {
+            if (cancelled) return;
+            const target: WalkthroughTarget = {
+              pageNumber: pageIdx + 1,
+              highlightArea: area,
+              source: "computed",
+            };
+            setWtTargets((prev) => ({ ...prev, [step.id]: target }));
+            return;
+          }
+        }
+        await new Promise((r) => setTimeout(r, 150));
+      }
+
+      if (process.env.NODE_ENV !== "production") {
+        console.warn("[FactifyViewer] Walkthrough highlightText not found:", {
+          docId,
+          stepId: step.id,
+          pageNumber: step.pageNumber,
+          highlightText,
+        });
+      }
+    };
+
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    wtActive,
+    currentWtStep,
+    wtTargets,
+    computeHighlightOnPage,
+    defaultPadding,
+    docId,
+    scrollToWtStep,
+    wtStepIndex,
+  ]);
+
+  // When a computed target resolves for the current step, re-scroll using the
+  // latest computed page + highlightArea (avoids stale-closure scroll).
+  useEffect(() => {
+    if (!wtActive) return;
+    const step = currentWtStep;
+    if (!step) return;
+    const target = wtTargets[step.id];
+    if (!target || target.source !== "computed") return;
+    scrollToWtStep(wtStepIndex);
+  }, [wtActive, currentWtStep, wtTargets, scrollToWtStep, wtStepIndex]);
 
   const startWalkthrough = useCallback(() => {
     setWtActive(true);
@@ -313,10 +605,16 @@ export function FactifyViewer({
           <span className="fv-doc-title">{title}</span>
         </div>
         <div className="fv-header-right">
-          <button className="fv-btn fv-share-btn">
-            <ShareIcon style={{ width: 16, height: 16 }} />
-            <span className="fv-share-label">Share</span>
-          </button>
+          {vipMode ? (
+            <div className="fv-customer-badge">
+              {isMobile ? "Customer" : "Customer View"}
+            </div>
+          ) : (
+            <button className="fv-btn fv-share-btn">
+              <ShareIcon style={{ width: 16, height: 16 }} />
+              <span className="fv-share-label">Share</span>
+            </button>
+          )}
           <span className="fv-green-dot" />
           <span className="fv-avatar">{initials}</span>
         </div>
@@ -395,9 +693,16 @@ export function FactifyViewer({
                       />
                       {wtActive &&
                         currentWtStep &&
-                        currentWtStep.pageNumber === i + 1 && (
-                          <WalkthroughOverlay step={currentWtStep} />
-                        )}
+                        (() => {
+                          const target = getEffectiveTarget(currentWtStep);
+                          if (target.pageNumber !== i + 1) return null;
+                          return (
+                            <WalkthroughOverlay
+                              highlightArea={target.highlightArea}
+                              source={target.source}
+                            />
+                          );
+                        })()}
                     </div>
                   ))}
                 </Document>
@@ -478,7 +783,12 @@ export function FactifyViewer({
         >
           <div className="fv-drawer-inner">
             {activeDrawer === "ai" && (
-              <AIChatDrawer onClose={closeDrawer} isMobile={isMobile} />
+              <AIChatDrawer
+                onClose={closeDrawer}
+                isMobile={isMobile}
+                docId={docId}
+                vipName={vipName}
+              />
             )}
             {activeDrawer === "comments" && (
               <CommentsDrawer
@@ -487,6 +797,9 @@ export function FactifyViewer({
                 userInitials={initials}
                 appThreads={commentThreads}
                 onAddReply={onAddReply}
+                vipName={vipName}
+                focusThreadId={focusThreadId}
+                vipMode={vipMode}
               />
             )}
             {activeDrawer !== null &&
@@ -691,7 +1004,7 @@ function SidePanelStrip({
 
 // ======================== AI CHAT DRAWER ========================
 
-const SUMMARY_TEXT =
+const FALLBACK_SUMMARY_TEXT =
   "This document provides a detailed analysis examining key themes, data, and conclusions. The AI has processed all pages and is ready to answer questions about the content.";
 
 const FOLLOW_UP_QUESTIONS = [
@@ -709,15 +1022,38 @@ interface Msg {
 function AIChatDrawer({
   onClose,
   isMobile,
+  docId,
+  vipName,
 }: {
   onClose: () => void;
   isMobile: boolean;
+  docId?: string;
+  vipName?: string;
 }) {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [thinking, setThinking] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLSpanElement>(null);
+  const suggestions = docId ? getChatSuggestions({ docId, vipName }) : FOLLOW_UP_QUESTIONS;
+  const summaryText = docId
+    ? getDocumentSummary({ docId, vipName })
+    : FALLBACK_SUMMARY_TEXT;
+
+  const bestSuggestion = (() => {
+    const typed = input.trim();
+    if (!suggestions.length) return "";
+    if (!typed) return suggestions[0];
+    const match = suggestions.find((s) =>
+      s.toLowerCase().startsWith(typed.toLowerCase())
+    );
+    return match || suggestions[0];
+  })();
+  const ghostRemainder =
+    input.trim() &&
+    bestSuggestion.toLowerCase().startsWith(input.trim().toLowerCase())
+      ? bestSuggestion.slice(input.length)
+      : "";
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -737,15 +1073,23 @@ function AIChatDrawer({
     if (inputRef.current) inputRef.current.textContent = "";
     setThinking(true);
     setTimeout(() => {
+      const scripted = docId
+        ? getChatResponse({ docId, prompt, vipName })
+        : {
+            content:
+              "Based on the document, " +
+              prompt.toLowerCase().replace(/\\?$/, "") +
+              ". The document provides detailed analysis with comprehensive methodology and supporting data.",
+          };
       setMessages((p) => [
         ...p,
         {
           id: (Date.now() + 1).toString(),
           role: "assistant",
           content:
-            "Based on the document, " +
-            prompt.toLowerCase().replace(/\?$/, "") +
-            ". The document provides detailed analysis with comprehensive methodology and supporting data.",
+            scripted.citations && scripted.citations.length > 0
+              ? `${scripted.content}\n\nSources: ${scripted.citations.filter(Boolean).join(", ")}`
+              : scripted.content,
         },
       ]);
       setThinking(false);
@@ -757,6 +1101,17 @@ function AIChatDrawer({
     send();
   };
   const onKey = (e: React.KeyboardEvent) => {
+    if (e.key === "Tab") {
+      const next = input.trim()
+        ? bestSuggestion
+        : bestSuggestion;
+      if (next) {
+        e.preventDefault();
+        setInput(next);
+        if (inputRef.current) inputRef.current.textContent = next;
+        return;
+      }
+    }
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       send();
@@ -843,7 +1198,7 @@ function AIChatDrawer({
             <StarsIcon />
             <span>Document Summary</span>
           </div>
-          <p className="fv-summary-text">{SUMMARY_TEXT}</p>
+          <p className="fv-summary-text">{summaryText}</p>
         </div>
 
         {messages.map((m) => (
@@ -892,32 +1247,38 @@ function AIChatDrawer({
       <div className="fv-chat-input-wrap">
         <form onSubmit={onSubmit}>
           <div className="fv-chat-input-box">
-            {isMobile ? (
-              <textarea
-                className="fv-chat-editable fv-chat-textarea-mobile"
-                placeholder="Ask me anything about this document"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={onKey}
-                rows={1}
-              />
-            ) : (
-              <span
-                ref={inputRef}
-                role="textbox"
-                aria-multiline="true"
-                contentEditable="plaintext-only"
-                suppressContentEditableWarning
-                onInput={(e) =>
-                  setInput(
-                    (e.target as HTMLSpanElement).textContent ?? ""
-                  )
-                }
-                onKeyDown={onKey}
-                data-placeholder="Ask me anything about this document"
-                className="fv-chat-editable"
-              />
-            )}
+            <div className="fv-chat-input-inner">
+              {ghostRemainder && (
+                <div className="fv-chat-ghost" aria-hidden>
+                  <span className="fv-chat-ghost-typed">{input}</span>
+                  <span className="fv-chat-ghost-rest">{ghostRemainder}</span>
+                </div>
+              )}
+              {isMobile ? (
+                <textarea
+                  className="fv-chat-editable fv-chat-textarea-mobile"
+                  placeholder="Ask me anything about this document"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={onKey}
+                  rows={1}
+                />
+              ) : (
+                <span
+                  ref={inputRef}
+                  role="textbox"
+                  aria-multiline="true"
+                  contentEditable="plaintext-only"
+                  suppressContentEditableWarning
+                  onInput={(e) =>
+                    setInput((e.target as HTMLSpanElement).textContent ?? "")
+                  }
+                  onKeyDown={onKey}
+                  data-placeholder="Ask me anything about this document"
+                  className="fv-chat-editable"
+                />
+              )}
+            </div>
             <button
               type="submit"
               disabled={!input.trim()}
@@ -950,18 +1311,41 @@ function fmtTime(d: Date | string) {
   );
 }
 
+function getAuthorDisplayName(
+  author: { name: string; role: "banker" | "vip" },
+  vipMode: boolean
+): string {
+  if (!vipMode) return author.name;
+  return author.role === "vip" ? "You" : "Your Banker";
+}
+
+function shouldShowBankerBadge(
+  author: { role: "banker" | "vip" },
+  displayName: string
+): boolean {
+  if (author.role !== "banker") return false;
+  // If the label already contains "Banker" (e.g. "Your Banker"), don't append a badge.
+  return !displayName.toLowerCase().includes("banker");
+}
+
 function CommentsDrawer({
   onClose,
   userName,
   userInitials,
   appThreads,
   onAddReply,
+  vipName,
+  focusThreadId,
+  vipMode,
 }: {
   onClose: () => void;
   userName: string;
   userInitials: string;
   appThreads: ViewerCommentThread[];
   onAddReply?: (threadId: string, text: string) => void;
+  vipName?: string;
+  focusThreadId?: string | null;
+  vipMode: boolean;
 }) {
   const [search, setSearch] = useState("");
   const [drafting, setDrafting] = useState(false);
@@ -981,6 +1365,18 @@ function CommentsDrawer({
   useEffect(() => {
     if (drafting) taRef.current?.focus();
   }, [drafting]);
+
+  useEffect(() => {
+    if (!focusThreadId) return;
+    // Wait for drawer content to mount.
+    const t = window.setTimeout(() => {
+      const el = document.querySelector(
+        `[data-thread-id="${focusThreadId}"]`
+      ) as HTMLElement | null;
+      el?.scrollIntoView({ block: "start", behavior: "smooth" });
+    }, 50);
+    return () => window.clearTimeout(t);
+  }, [focusThreadId, appThreads.length]);
 
   const addComment = (e: FormEvent) => {
     e.preventDefault();
@@ -1052,7 +1448,9 @@ function CommentsDrawer({
               <span className="fv-comment-avatar fv-comment-avatar-user">
                 {userInitials}
               </span>
-              <span className="fv-comment-author">{userName}</span>
+              <span className="fv-comment-author">
+                {vipMode ? "You" : userName}
+              </span>
             </div>
             <form onSubmit={addComment}>
               <textarea
@@ -1091,6 +1489,8 @@ function CommentsDrawer({
             key={thread.id}
             thread={thread}
             onAddReply={onAddReply}
+            vipName={vipName}
+            vipMode={vipMode}
           />
         ))}
 
@@ -1107,7 +1507,7 @@ function CommentsDrawer({
                 </span>
                 <div className="fv-comment-meta">
                   <span className="fv-comment-author">
-                    {c.author}
+                    {vipMode ? "You" : c.author}
                   </span>
                   <span className="fv-comment-time">
                     {fmtTime(c.timestamp)}
@@ -1153,12 +1553,52 @@ function CommentsDrawer({
 function AppCommentThread({
   thread,
   onAddReply,
+  vipName,
+  vipMode,
 }: {
   thread: ViewerCommentThread;
   onAddReply?: (threadId: string, text: string) => void;
+  vipName?: string;
+  vipMode: boolean;
 }) {
   const [replyText, setReplyText] = useState("");
   const [showReply, setShowReply] = useState(false);
+  const replyInputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-resize textarea
+  useEffect(() => {
+    const el = replyInputRef.current;
+    if (el) {
+      el.style.height = "0px";
+      const scrollHeight = el.scrollHeight;
+      el.style.height = Math.max(32, scrollHeight) + "px";
+    }
+  }, [replyText, showReply]);
+
+  const getSuggestedReply = useCallback(() => {
+    if (!vipMode) return "";
+    const firstName = (vipName ? vipName.split(" ")[0] : "Alexandra") || "Alexandra";
+    const snippet =
+      thread.quoteText.length > 90
+        ? thread.quoteText.slice(0, 90).trim() + "..."
+        : thread.quoteText;
+    const templates = [
+      `Thanks for flagging this. The point on "${snippet}" is helpful. Can you share your conviction level and what could change the outlook?`,
+      `Appreciate the highlight. On "${snippet}", how should we think about near-term risks vs the base case?`,
+      `This is useful context. For "${snippet}", can you point me to the section with supporting data and the key assumptions?`,
+    ];
+    const idx = Math.abs(thread.id.length + snippet.length) % templates.length;
+    return templates[idx];
+  }, [thread.id, thread.quoteText, vipName, vipMode]);
+
+  const suggestedReply = getSuggestedReply();
+
+  const acceptSuggestedReply = useCallback(() => {
+    if (!suggestedReply) return;
+    setReplyText(suggestedReply);
+    // Keep focus in the input after accepting via Tab.
+    window.setTimeout(() => replyInputRef.current?.focus(), 0);
+  }, [suggestedReply]);
 
   const handleReply = () => {
     if (!replyText.trim()) return;
@@ -1170,7 +1610,7 @@ function AppCommentThread({
   };
 
   return (
-    <div>
+    <div data-thread-id={thread.id}>
       {/* Quote highlight */}
       <div className="fv-thread-quote">
         <p className="fv-thread-quote-text">
@@ -1186,6 +1626,7 @@ function AppCommentThread({
       {/* Comment messages */}
       {thread.comments.map((comment, idx) => {
         const hasMore = idx < thread.comments.length - 1;
+        const displayName = getAuthorDisplayName(comment.author, vipMode);
         return (
           <div key={comment.id} className="fv-comment-item">
             {hasMore && (
@@ -1200,8 +1641,8 @@ function AppCommentThread({
               </span>
               <div className="fv-comment-meta">
                 <span className="fv-comment-author">
-                  {comment.author.name}
-                  {comment.author.role === "banker" && (
+                  {displayName}{" "}
+                  {shouldShowBankerBadge(comment.author, displayName) && (
                     <span className="fv-banker-badge">
                       Banker
                     </span>
@@ -1221,17 +1662,35 @@ function AppCommentThread({
       <div className="fv-reply-footer">
         {showReply ? (
           <div className="fv-reply-row">
-            <input
-              type="text"
-              placeholder="Write a reply..."
-              value={replyText}
-              onChange={(e) => setReplyText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleReply();
-              }}
-              className="fv-reply-input"
-              autoFocus
-            />
+            <div className="fv-reply-input-wrap">
+              <textarea
+                ref={replyInputRef}
+                placeholder="Write a reply..."
+                value={replyText}
+                onChange={(e) => setReplyText(e.target.value)}
+                // Capture-phase to ensure Tab doesn't move focus to Cancel/Reply buttons.
+                onKeyDownCapture={(e) => {
+                  if (e.key === "Tab" && suggestedReply) {
+                    e.preventDefault();
+                    acceptSuggestedReply();
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Tab" && suggestedReply) {
+                    e.preventDefault();
+                    acceptSuggestedReply();
+                    return;
+                  }
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleReply();
+                  }
+                }}
+                className="fv-reply-input"
+                autoFocus
+                rows={1}
+              />
+            </div>
             <button
               className="fv-btn fv-btn-primary fv-reply-action-btn"
               onClick={handleReply}
@@ -1319,12 +1778,18 @@ function PlaceholderDrawer({
 
 // ======================== WALKTHROUGH ========================
 
-function WalkthroughOverlay({ step }: { step: WalkthroughStep }) {
-  const { highlightArea } = step;
+function WalkthroughOverlay({
+  highlightArea,
+  source,
+}: {
+  highlightArea: HighlightArea;
+  source: "computed" | "template";
+}) {
   return (
     <div
       className="fv-walkthrough-highlight"
       aria-hidden
+      data-fv-highlight-source={source}
       style={{
         top: `${highlightArea.top}%`,
         left: `${highlightArea.left}%`,

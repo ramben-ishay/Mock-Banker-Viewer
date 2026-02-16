@@ -141,7 +141,9 @@ export default function DashboardPage() {
                         <AlertTriangle size={14} className="text-status-red-700" />
                         <p className="text-[11px] font-bold text-status-red-700 uppercase tracking-wider">{insight.title}</p>
                       </div>
-                      <p className="text-sm text-neutral-700 leading-relaxed italic">"{insight.body}"</p>
+                      <p className="text-sm text-neutral-700 leading-relaxed italic">
+                        &quot;{insight.body}&quot;
+                      </p>
                     </div>
                   </Link>
                 </motion.div>

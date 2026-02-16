@@ -10,17 +10,21 @@ import { motion } from "framer-motion";
 
 interface RecommendationCardProps {
   recommendation: Recommendation;
+  vipId?: string;
   onShare: () => void;
   onDismiss: () => void;
 }
 
 export function RecommendationCard({
   recommendation,
+  vipId,
   onShare,
   onDismiss,
 }: RecommendationCardProps) {
   const relevance = getRelevanceColor(recommendation.relevanceScore);
-  const viewerUrl = `/viewer/${recommendation.documentId}`;
+  const viewerUrl = `/viewer/${recommendation.documentId}${
+    vipId ? `?vipId=${encodeURIComponent(vipId)}` : ""
+  }`;
 
   return (
     <motion.div
