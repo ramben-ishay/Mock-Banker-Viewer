@@ -6,7 +6,7 @@ import { ArrowLeft, ExternalLink, FileText, Users, Eye, BookOpen, Send, BarChart
 import { Button } from "@/components/ui/Button";
 import { Avatar } from "@/components/ui/Avatar";
 import { Badge, Tag } from "@/components/ui/Badge";
-import { DOCUMENTS, ENGAGEMENT_TIMELINES, RECOMMENDATIONS, MOCK_VIPS } from "@/lib/mock-data";
+import { DOCUMENTS, ENGAGEMENT_TIMELINES, RECOMMENDATIONS, VIPS } from "@/lib/data";
 import { formatDate } from "@/lib/utils";
 import { motion } from "framer-motion";
 
@@ -47,7 +47,7 @@ export default function DocumentAnalyticsPage({
   for (const [vipId, entries] of Object.entries(ENGAGEMENT_TIMELINES)) {
     for (const entry of entries) {
       if (entry.documentId === id) {
-        const vip = MOCK_VIPS.find((v) => v.id === vipId);
+        const vip = VIPS.find((v) => v.id === vipId);
         if (vip) {
           vipEngagement.push({
             vipId,
@@ -76,7 +76,7 @@ export default function DocumentAnalyticsPage({
   for (const [vipId, recs] of Object.entries(RECOMMENDATIONS)) {
     for (const rec of recs) {
       if (rec.documentId === id && !rec.dismissed) {
-        const vip = MOCK_VIPS.find((v) => v.id === vipId);
+        const vip = VIPS.find((v) => v.id === vipId);
         if (vip) {
           recommendedVips.push({
             vipId,

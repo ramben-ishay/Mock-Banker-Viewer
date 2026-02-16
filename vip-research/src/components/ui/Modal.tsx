@@ -10,6 +10,13 @@ interface ModalProps {
   title?: string;
   children: React.ReactNode;
   maxWidth?: string;
+  /**
+   * When true, disable overlay/Escape/X close.
+   * Useful for short, non-interruptible demo animations.
+   */
+  preventClose?: boolean;
+  /** Controls the dialog exit animation feel. */
+  exitVariant?: "shrink" | "expand";
 }
 
 export function Modal({
@@ -18,15 +25,19 @@ export function Modal({
   title,
   children,
   maxWidth = "max-w-lg",
+  preventClose = false,
+  exitVariant = "shrink",
 }: ModalProps) {
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key !== "Escape") return;
+      if (preventClose) return;
+      onClose();
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, preventClose]);
 
   return (
     <AnimatePresence>
@@ -39,14 +50,17 @@ export function Modal({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="absolute inset-0 bg-neutral-800/50"
-            onClick={onClose}
+            onClick={preventClose ? undefined : onClose}
           />
 
           {/* Dialog */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
+            exit={{
+              opacity: 0,
+              scale: exitVariant === "expand" ? 1.02 : 0.95,
+            }}
             transition={{ duration: 0.2 }}
             className={`relative w-full ${maxWidth} bg-neutral-000 rounded-popup shadow-overlay max-h-[85vh] overflow-y-auto`}
             role="dialog"
@@ -59,8 +73,13 @@ export function Modal({
                   {title}
                 </h6>
                 <button
-                  onClick={onClose}
-                  className="p-1 rounded-cta text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 transition-colors cursor-pointer"
+                  onClick={preventClose ? undefined : onClose}
+                  disabled={preventClose}
+                  className={`p-1 rounded-cta transition-colors cursor-pointer ${
+                    preventClose
+                      ? "text-neutral-400 cursor-not-allowed"
+                      : "text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900"
+                  }`}
                 >
                   <X size={20} />
                 </button>

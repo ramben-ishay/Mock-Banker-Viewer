@@ -11,7 +11,7 @@ import { CommentsPanel } from "@/components/comments/CommentsPanel";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { Tag } from "@/components/ui/Badge";
-import { AI_INSIGHTS, SUGGESTED_ACTIONS } from "@/lib/mock-data";
+import { AI_INSIGHTS, SUGGESTED_ACTIONS } from "@/lib/data";
 import { formatRelativeDate, formatDate } from "@/lib/utils";
 import { ArrowLeft, Sparkles, MessageSquare, Building2, Briefcase, DollarSign, BookOpen, Phone, Mail, CalendarDays, Users, BarChart3 } from "lucide-react";
 import { Recommendation } from "@/lib/types";
@@ -24,7 +24,7 @@ export default function VipDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const { state, dispatch, addToast } = useApp();
+  const { state, dispatch } = useApp();
   const [shareModalRec, setShareModalRec] = useState<Recommendation | null>(null);
   const [showComments, setShowComments] = useState(false);
 
@@ -41,7 +41,9 @@ export default function VipDetailPage({
   if (!vip) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <p className="text-neutral-600">VIP not found. Connect your CRM first.</p>
+        <p className="text-neutral-600">
+          VIP not found. Connect your CRM to import client data.
+        </p>
         <Link href="/vips">
           <Button variant="primary">Go to My VIPs</Button>
         </Link>
@@ -141,14 +143,20 @@ export default function VipDetailPage({
             </div>
 
             {/* Compact info row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div
+              className={`grid gap-4 mb-6 grid-cols-1 sm:grid-cols-2 ${
+                showComments ? "" : "lg:grid-cols-4"
+              }`}
+            >
               <div className="bg-white border border-neutral-300 rounded-lg p-4 flex items-center gap-4 shadow-tight hover:shadow-fluffy transition-shadow duration-300">
                 <div className="w-10 h-10 rounded-cta bg-neutral-100 flex items-center justify-center text-neutral-500 flex-shrink-0">
                   <Building2 size={20} />
                 </div>
                 <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-0.5">Company</p>
-                  <p className="text-[15px] font-bold text-neutral-950" title={vip.company}>{vip.company}</p>
+                  <p className="text-[15px] font-bold text-neutral-950 truncate" title={vip.company}>
+                    {vip.company}
+                  </p>
                 </div>
               </div>
               <div className="bg-white border border-neutral-300 rounded-lg p-4 flex items-center gap-4 shadow-tight hover:shadow-fluffy transition-shadow duration-300">
@@ -157,7 +165,9 @@ export default function VipDetailPage({
                 </div>
                 <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-0.5">Role</p>
-                  <p className="text-[15px] font-bold text-neutral-950" title={vip.role}>{vip.role}</p>
+                  <p className="text-[15px] font-bold text-neutral-950 truncate" title={vip.role}>
+                    {vip.role}
+                  </p>
                 </div>
               </div>
               <div className="bg-white border border-neutral-300 rounded-lg p-4 flex items-center gap-4 shadow-tight hover:shadow-fluffy transition-shadow duration-300">
@@ -175,18 +185,27 @@ export default function VipDetailPage({
                 </div>
                 <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-0.5">Last Meeting</p>
-                  <p className="text-[15px] font-bold text-neutral-950">{formatDate(vip.lastMeeting)}</p>
+                  <p
+                    className="text-[15px] font-bold text-neutral-950 truncate"
+                    title={formatDate(vip.lastMeeting)}
+                  >
+                    {formatDate(vip.lastMeeting)}
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div
+              className={`grid gap-6 grid-cols-1 ${showComments ? "" : "lg:grid-cols-2"}`}
+            >
               {/* Reading Profile card */}
               <div className="bg-white border border-neutral-300 rounded-lg p-6 shadow-tight relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-brand-100/50 blur-3xl -mr-16 -mt-16 pointer-events-none" />
                 <div className="flex items-center gap-3 mb-4 relative z-10">
                   <BookOpen size={20} className="text-brand-500" />
-                  <h4 className="text-base font-bold text-neutral-950">Reading Profile</h4>
+                <h4 className="text-base font-bold text-neutral-950">
+                  Engagement Intelligence
+                </h4>
                 </div>
                 <p className="text-[15px] text-neutral-700 leading-relaxed font-medium relative z-10 italic">
                   &quot;{vip.readingProfile}&quot;
@@ -198,7 +217,7 @@ export default function VipDetailPage({
                 <div className="bg-white border border-neutral-300 rounded-lg p-6 shadow-tight">
                   <h4 className="text-base font-bold text-neutral-950 mb-5 flex items-center gap-3">
                     <MessageSquare size={18} className="text-neutral-400" />
-                    Recent Communications
+                    Recent Touchpoints
                   </h4>
                   <div className="flex flex-col gap-4">
                     {vip.pastCommunications.map((comm, idx) => (
@@ -236,6 +255,7 @@ export default function VipDetailPage({
               docsShared={vip.docsShared}
               avgCompletion={vip.avgCompletion}
               lastActive={formatRelativeDate(vip.lastActive)}
+              compact={showComments}
             />
 
             {/* AI Insight */}
@@ -252,7 +272,9 @@ export default function VipDetailPage({
             {/* Suggested Actions */}
             {suggestedActions.length > 0 && (
               <div className="mt-6">
-                <p className="text-[11px] font-bold text-neutral-500 uppercase tracking-widest mb-3">AI Suggested Next Steps</p>
+                <p className="text-[11px] font-bold text-neutral-500 uppercase tracking-widest mb-3">
+                  Recommended Actions
+                </p>
                 <div className="flex flex-wrap gap-3">
                   {suggestedActions.map((action) => (
                     <Button key={action} variant="secondary" size="md" className="bg-white border-neutral-300 font-bold text-[13px] hover:border-brand-300 hover:text-brand-600 shadow-sm">
@@ -267,7 +289,7 @@ export default function VipDetailPage({
             {timeline.length > 0 && (
               <div className="mt-10">
                 <h4 className="text-sm font-bold text-neutral-950 mb-4 tracking-tight">
-                  Activity History
+                  Document Engagement History
                 </h4>
                 <div className="bg-white border border-neutral-300 rounded-lg p-6 shadow-tight">
                   <EngagementTimeline entries={timeline} vipId={id} />
@@ -308,8 +330,12 @@ export default function VipDetailPage({
                 className="text-center py-12 text-neutral-600 bg-neutral-100 rounded-lg border-2 border-dashed border-neutral-300"
               >
                 <Sparkles size={32} className="mx-auto text-brand-300 mb-3" />
-                <p className="text-lg font-bold text-neutral-950 tracking-tight">All caught up!</p>
-                <p className="text-neutral-600 mt-1">No new research matches for {vip.name} at this time.</p>
+                <p className="text-lg font-bold text-neutral-950 tracking-tight">
+                  No pending recommendations
+                </p>
+                <p className="text-neutral-600 mt-1">
+                  All high-relevance research has been shared with {vip.name}.
+                </p>
               </motion.div>
             )}
           </section>

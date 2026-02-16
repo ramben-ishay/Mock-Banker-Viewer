@@ -1,6 +1,6 @@
 "use client";
 
-import { DOCUMENTS, QUOTE_SUGGESTIONS } from "@/lib/mock-data";
+import { DOCUMENTS, QUOTE_SUGGESTIONS } from "@/lib/data";
 
 function normalize(s: string): string {
   return s.toLowerCase().replace(/\s+/g, " ").trim();
@@ -12,15 +12,15 @@ function firstName(fullName?: string): string {
 }
 
 const FALLBACK_SUMMARY_TEXT =
-  "This document provides a detailed analysis examining key themes, data, and conclusions. The AI has processed all pages and is ready to answer questions about the content.";
+  "This research report presents a structured analysis of key themes, data, and investment conclusions. The AI assistant has processed all pages and is ready to answer questions on the content and its portfolio implications.";
 
-// A couple of curated summaries help the demo feel closer to the design reference.
-// Everything else falls back to an auto-generated, doc-aware summary built from mock data.
+// A couple of curated summaries for a polished experience.
+// Everything else falls back to an auto-generated, doc-aware summary built from the document corpus.
 const CURATED_SUMMARIES: Record<string, string> = {
   "doc-4":
-    "This J.P. Morgan Research report provides a 2026 sector review of ESG and clean energy investing, analyzing the impact of evolving regulations, subsidy implementation, and capital allocation trends across renewables, grid infrastructure, and carbon markets. The report examines policy developments in the U.S. and Europe, including IRA implementation and the Green Deal, while maintaining a constructive outlook on select utilities and renewable developers with strong growth prospects and financial discipline. It highlights investment opportunities across solar, wind, storage, and grid infrastructure, with detailed analysis of regional capital expenditure patterns and corporate renewable procurement trends.",
+    "This J.P. Morgan Research report provides a 2026 sector review of ESG and clean energy investing, analyzing the impact of evolving regulations, subsidy implementation, and capital allocation trends across renewables, grid infrastructure, and carbon markets. The report examines policy developments in the U.S. and Europe, including IRA implementation and the Green Deal, while maintaining a constructive outlook on select utilities and renewable developers with strong growth prospects and financial discipline. It highlights investment opportunities across solar, wind, storage, and grid infrastructure, with detailed analysis of regional capital expenditure patterns and corporate renewable procurement trends. Directly relevant for mandates with ESG overlay requirements or renewable infrastructure exposure.",
   "doc-7":
-    "This J.P. Morgan Research report analyzes the ongoing reset in global commercial real estate, with a focus on office repricing and the persistence of remote and hybrid work patterns. It highlights an expansion in U.S. office cap rates from cycle lows, continued pressure in secondary locations, and a base case where repricing extends through 2026 with stabilization beginning in late 2026 or early 2027 for select segments. The report favors more resilient areas of the market including logistics, multifamily, and data center exposure, and frames the outlook around cap rates, net absorption, and segment-level fundamentals.",
+    "This J.P. Morgan Research report analyzes the ongoing reset in global commercial real estate, with a focus on office repricing and the persistence of remote and hybrid work patterns. It highlights an expansion in U.S. office cap rates from cycle lows, continued pressure in secondary locations, and a base case where repricing extends through 2026 with stabilization beginning in late 2026 or early 2027 for select segments. The report favors more resilient areas of the market including logistics, multifamily, and data center exposure, and frames the outlook around cap rates, net absorption, and segment-level fundamentals. Relevant for portfolios with direct or indirect CRE exposure, including REIT allocations and infrastructure debt.",
 };
 
 export function getDocumentSummary({
@@ -52,7 +52,7 @@ export function getDocumentSummary({
 
   const takeawaySentence =
     takeaways.length > 0
-      ? `Key takeaways (demo scripted): ${takeaways.join(" ")}`
+      ? `Key takeaways: ${takeaways.join(" ")}`
       : "";
 
   return [
@@ -77,23 +77,23 @@ export function getChatSuggestions({
 
   // Keep these short so Tab autocomplete feels crisp.
   const base = [
-    `Can you summarize this document in 3 bullets?`,
-    `What are the key risks mentioned?`,
-    `What is the main conclusion and why?`,
+    `Summarize the investment thesis in three key points`,
+    `What are the principal risk factors and downside scenarios?`,
+    `What is the base-case conclusion and the supporting rationale?`,
   ];
 
   const topicSpecific = topics
     ? [
-        `What does this say about ${topics}?`,
-        `${vip} here - what should I watch for in the next 30-90 days?`,
+        `How does this report frame the outlook for ${topics}?`,
+        `${vip} -- what are the key catalysts and monitoring points over the next 30-90 days?`,
       ]
-    : [`${vip} here - what should I watch for in the next 30-90 days?`];
+    : [`${vip} -- what are the key catalysts and monitoring points over the next 30-90 days?`];
 
   // Add one quote-derived prompt to make it feel document-aware.
   const quotes = QUOTE_SUGGESTIONS[docId] || [];
   const quotePrompt =
     quotes.length > 0
-      ? [`Explain this passage: "${quotes[0].quoteText.slice(0, 72)}..."`]
+      ? [`Unpack this passage and its implications: "${quotes[0].quoteText.slice(0, 72)}..."`]
       : [];
 
   return [...topicSpecific, ...quotePrompt, ...base];
@@ -119,20 +119,20 @@ export function getChatResponse({
   // Generic fallback (still doc-aware via title/topics).
   const fallback = {
     content: [
-      `Here is a demo-mode answer based on the document "${doc?.title || "this document"}":`,
+      `Here is an answer based on the document "${doc?.title || "this document"}":`,
       "",
       `- Focus areas: ${(doc?.topics || []).slice(0, 4).join(", ") || "key themes and findings"}`,
-      `- What to do next: review the executive summary and the risks/monitoring section, then follow up with your banker on positioning impacts.`,
+      `- What to do next: review the executive summary and the risk-monitoring framework, then discuss positioning implications with your coverage team.`,
       "",
-      `${vip}, if you tell me what you are optimizing for (risk reduction, conviction, timing), I can tailor the next steps.`,
+      `${vip}, if you specify your objective -- risk reduction, conviction building, or timing -- I can tailor the analysis.`,
     ].join("\n"),
   };
 
-  // Patterns that map to real quotes we already have in mock data.
+  // Patterns that map to quotes we already have for this document.
   if (q.includes("3 bullets") || q.includes("three bullets") || q.includes("summarize")) {
     const bullets = quotes.slice(0, 3).map((qq) => `- ${qq.quoteText}`);
     return {
-      content: [`Summary (demo scripted):`, "", ...bullets].join("\n"),
+      content: [`Investment Thesis Summary:`, "", ...bullets].join("\n"),
       citations: [cite(0), cite(1), cite(2)].filter(Boolean) as string[],
     };
   }
@@ -142,11 +142,11 @@ export function getChatResponse({
     if (quote(2)) {
       return {
         content: [
-          `Key risks called out in this document:`,
+          `Principal Risk Factors:`,
           "",
           `- ${quote(2)}`,
           "",
-          `If you want, I can translate these into a simple watchlist (data points + triggers).`,
+          `I can structure these into a monitoring framework with specific triggers and data points to track.`,
         ].join("\n"),
         citations: [cite(2)].filter(Boolean) as string[],
       };
@@ -159,10 +159,10 @@ export function getChatResponse({
     if (!best) return fallback;
     return {
       content: [
-        `Explanation (demo scripted):`,
+        `Explanation:`,
         "",
-        `- In plain English: this passage highlights a key driver or conclusion the authors want you to anchor on.`,
-        `- Why it matters: it affects positioning, timing, and downside scenarios for the themes in scope.`,
+        `- In plain English: this passage identifies a key driver or conclusion the research team views as central to the thesis.`,
+        `- Why it matters: this directly informs position sizing, entry timing, and downside scenario planning.`,
         "",
         `Passage: "${best.quoteText}"`,
       ].join("\n"),
@@ -173,7 +173,7 @@ export function getChatResponse({
   if (q.includes("30-90") || q.includes("next 30") || q.includes("watch for")) {
     return {
       content: [
-        `${vip}, here is a simple 30-90 day watchlist (demo scripted):`,
+        `${vip}, here is a 30-90 day catalyst watchlist:`,
         "",
         `- Watch the headline drivers in the executive summary and compare them to the base-case assumptions.`,
         `- Track any risk factors explicitly called out (policy changes, demand slowdowns, or second-order effects).`,

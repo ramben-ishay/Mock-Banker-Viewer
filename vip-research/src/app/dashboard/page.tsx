@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useApp } from "@/lib/vip-context";
-import { DOCUMENTS, AI_INSIGHTS } from "@/lib/mock-data";
+import { DOCUMENTS, AI_INSIGHTS } from "@/lib/data";
 import { Avatar } from "@/components/ui/Avatar";
 import { Users, FileText, BarChart3, TrendingUp, Clock, Award, AlertTriangle } from "lucide-react";
 import { motion } from "framer-motion";
@@ -69,7 +69,7 @@ export default function DashboardPage() {
           Dashboard
         </h2>
         <p className="text-base text-neutral-600 mt-1.5 font-medium">
-          Aggregate stats across all your VIP clients
+          Aggregate engagement metrics across your VIP coverage
         </p>
       </div>
 
@@ -111,7 +111,7 @@ export default function DashboardPage() {
               <AlertTriangle size={18} className="text-status-red-500" />
             </div>
             <h3 className="text-xl font-bold font-[family-name:var(--font-heading)] text-neutral-950 tracking-tight">
-              Attention Needed
+              Requires Follow-Up
             </h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -294,7 +294,7 @@ export default function DashboardPage() {
       {/* Empty State */}
       {vips.length === 0 && (
         <div className="text-center py-16 text-neutral-600">
-          <p>Connect your CRM to see dashboard statistics.</p>
+          <p>Connect your CRM to populate coverage analytics.</p>
         </div>
       )}
     </div>

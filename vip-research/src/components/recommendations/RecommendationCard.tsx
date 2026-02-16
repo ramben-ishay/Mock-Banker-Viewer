@@ -89,7 +89,7 @@ export function RecommendationCard({
             onClick={onShare}
             className="shadow-md shadow-brand-500/10"
           >
-            Share with VIP
+            Distribute to VIP
           </Button>
         ) : (
           <Button

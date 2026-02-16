@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Avatar } from "@/components/ui/Avatar";
 import { Tag } from "@/components/ui/Badge";
 import { VIP } from "@/lib/types";
-import { formatRelativeDate } from "@/lib/utils";
 import { FileText, Clock, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -60,19 +59,19 @@ export function VipCard({ vip, index }: VipCardProps) {
               <div className="p-1.5 rounded-md bg-neutral-100 text-neutral-500 group-hover:text-brand-500 transition-colors">
                 <FileText size={14} />
               </div>
-              <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-tighter text-center">{vip.docsShared} Shared</span>
+              <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-tighter text-center">{vip.docsShared} Sent</span>
             </div>
             <div className="flex flex-col items-center gap-1 border-x border-neutral-100">
               <div className="p-1.5 rounded-md bg-neutral-100 text-neutral-500 group-hover:text-status-green-700 transition-colors">
                 <BarChart3 size={14} />
               </div>
-              <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-tighter text-center">{vip.avgCompletion}% Read</span>
+              <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-tighter text-center">{vip.avgCompletion}% Completion</span>
             </div>
             <div className="flex flex-col items-center gap-1">
               <div className="p-1.5 rounded-md bg-neutral-100 text-neutral-500 group-hover:text-neutral-900 transition-colors">
                 <Clock size={14} />
               </div>
-              <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-tighter text-center">Active {vip.lastActive}</span>
+              <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-tighter text-center">Last engaged {vip.lastActive}</span>
             </div>
           </div>
         </div>

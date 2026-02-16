@@ -17,12 +17,12 @@ import {
   HighlightArea,
 } from "./types";
 import {
-  MOCK_VIPS,
+  VIPS,
   RECOMMENDATIONS,
   COMMENT_THREADS,
   ENGAGEMENT_TIMELINES,
   generateRecommendationsForVip,
-} from "./mock-data";
+} from "./data";
 
 // ============================================================
 // STATE
@@ -43,18 +43,19 @@ export interface Toast {
 }
 
 const initialState: AppState = {
-  vips: [],
-  isConnected: false,
-  recommendations: {},
-  commentThreads: {},
-  engagementTimelines: {},
+  // Seed demo data immediately so /vips lands on the full list.
+  vips: VIPS,
+  isConnected: true,
+  recommendations: { ...RECOMMENDATIONS },
+  commentThreads: { ...COMMENT_THREADS },
+  engagementTimelines: { ...ENGAGEMENT_TIMELINES },
   toasts: [],
 };
 
 // ============================================================
-// PERSISTENCE (for cross-tab demo sync)
+// PERSISTENCE (cross-tab state sync)
 // ============================================================
-const STORAGE_KEY = "factify_demo_state_v1";
+const STORAGE_KEY = "factify_app_state_v1";
 
 type PersistedState = Pick<
   AppState,
@@ -83,16 +84,6 @@ function loadPersistedState(): PersistedState | null {
   }
 }
 
-function selectPersistedState(state: AppState): PersistedState {
-  return {
-    vips: state.vips,
-    isConnected: state.isConnected,
-    recommendations: state.recommendations,
-    commentThreads: state.commentThreads,
-    engagementTimelines: state.engagementTimelines,
-  };
-}
-
 function parsePageNumber(pageReference?: string): number | undefined {
   if (!pageReference) return undefined;
   const m = pageReference.match(/p\.\s*(\d+)/i);
@@ -102,7 +93,7 @@ function parsePageNumber(pageReference?: string): number | undefined {
 }
 
 function highlightForIndex(idx: number): HighlightArea {
-  // Demo-friendly deterministic placement (percentages).
+  // Deterministic placement (percentages).
   const top = 14 + (idx % 4) * 18;
   const left = 8;
   const width = 84;
@@ -115,7 +106,7 @@ function highlightForIndex(idx: number): HighlightArea {
 // ============================================================
 type Action =
   | { type: "HYDRATE_STATE"; payload: PersistedState }
-  | { type: "RESET_DEMO" }
+  | { type: "RESET_STATE" }
   | { type: "CONNECT_CRM" }
   | { type: "ADD_VIP"; payload: VIP }
   | {
@@ -160,14 +151,14 @@ function appReducer(state: AppState, action: Action): AppState {
         toasts: state.toasts,
       };
 
-    case "RESET_DEMO":
+    case "RESET_STATE":
       return initialState;
 
     case "CONNECT_CRM":
       return {
         ...state,
         isConnected: true,
-        vips: MOCK_VIPS,
+        vips: VIPS,
         recommendations: { ...RECOMMENDATIONS },
         commentThreads: { ...COMMENT_THREADS },
         engagementTimelines: { ...ENGAGEMENT_TIMELINES },
@@ -224,8 +215,8 @@ function appReducer(state: AppState, action: Action): AppState {
               {
                 id: `c-share-${Date.now()}-${idx}`,
                 author: {
-                  name: "Your Banker",
-                  initials: "YB",
+                  name: "Alexandra Whitfield",
+                  initials: "AW",
                   role: "banker" as const,
                   color: "#444aff",
                 },
@@ -318,10 +309,10 @@ function appReducer(state: AppState, action: Action): AppState {
               {
                 id: `c-${Date.now()}`,
                 author: {
-                  // In this demo, the VIP is the "user" of the PDF viewer.
+                  // The VIP is the "user" of the PDF viewer.
                   // Banker-authored messages should never render as "You Banker".
-                  name: "Your Banker",
-                  initials: "YB",
+                  name: "Alexandra Whitfield",
+                  initials: "AW",
                   role: "banker" as const,
                   color: "#444aff",
                 },
@@ -354,7 +345,7 @@ interface AppContextType {
   state: AppState;
   dispatch: React.Dispatch<Action>;
   addToast: (message: string, type?: Toast["type"]) => void;
-  resetDemo: () => void;
+  resetState: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -362,7 +353,11 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState, (init) => {
     const persisted = loadPersistedState();
-    return persisted ? { ...init, ...persisted } : init;
+    // If a previous run persisted the old "pre-connect" empty state,
+    // prefer the seeded demo state so the VIP list is never blank by default.
+    if (!persisted) return init;
+    if (persisted.vips.length === 0) return init;
+    return { ...init, ...persisted };
   });
   const toastTimeoutsRef = useRef<number[]>([]);
   const persistTimerRef = useRef<number | null>(null);
@@ -388,7 +383,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     toastTimeoutsRef.current.push(timeoutId);
   }, [dispatch]);
 
-  // Persist core demo state (excluding toasts). Debounced to avoid chatty writes.
+  // Persist core state (excluding toasts). Debounced to avoid chatty writes.
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (persistTimerRef.current) window.clearTimeout(persistTimerRef.current);
@@ -396,10 +391,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
       try {
         window.localStorage.setItem(
           STORAGE_KEY,
-          JSON.stringify(selectPersistedState(state))
+          JSON.stringify({
+            vips: state.vips,
+            isConnected: state.isConnected,
+            recommendations: state.recommendations,
+            commentThreads: state.commentThreads,
+            engagementTimelines: state.engagementTimelines,
+          })
         );
       } catch {
-        // Ignore quota / serialization errors in demo mode.
+        // Ignore quota / serialization errors.
       }
     }, 120);
   }, [
@@ -422,8 +423,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener("storage", onStorage);
   }, [dispatch]);
 
-  // Exposed helper for repeatable demos.
-  const resetDemo = useCallback(() => {
+  // Exposed helper to clear state.
+  const resetState = useCallback(() => {
     if (typeof window !== "undefined") {
       try {
         window.localStorage.removeItem(STORAGE_KEY);
@@ -431,11 +432,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
         // ignore
       }
     }
-    dispatch({ type: "RESET_DEMO" });
+    dispatch({ type: "RESET_STATE" });
   }, [dispatch]);
 
   return (
-    <AppContext.Provider value={{ state, dispatch, addToast, resetDemo }}>
+    <AppContext.Provider value={{ state, dispatch, addToast, resetState }}>
       {children}
     </AppContext.Provider>
   );

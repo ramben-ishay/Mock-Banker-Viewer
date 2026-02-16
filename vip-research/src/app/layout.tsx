@@ -10,7 +10,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "VIP Research Distribution",
-  description: "AI powered research distribution platform for bankers",
+  description:
+    "AI-powered institutional research distribution for J.P. Morgan Private Bank coverage teams",
 };
 
 export default function RootLayout({

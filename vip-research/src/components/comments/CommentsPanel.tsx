@@ -5,7 +5,9 @@ import { CommentThread } from "@/lib/types";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { useApp } from "@/lib/vip-context";
-import { Send, MessageCircle, ExternalLink } from "lucide-react";
+import { AIPersonalizedBadge } from "@/components/ui/AIPersonalizedBadge";
+import { getBankerSuggestedReply } from "@/lib/personalized-comments";
+import { Send, MessageCircle, ExternalLink, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface CommentsPanelProps {
@@ -14,8 +16,9 @@ interface CommentsPanelProps {
 }
 
 export function CommentsPanel({ vipId, threads }: CommentsPanelProps) {
-  const { dispatch } = useApp();
+  const { dispatch, state } = useApp();
   const [replyTexts, setReplyTexts] = useState<Record<string, string>>({});
+  const vipName = state.vips.find((v) => v.id === vipId)?.name || null;
 
   const handleReply = (threadId: string) => {
     const text = replyTexts[threadId];
@@ -38,7 +41,7 @@ export function CommentsPanel({ vipId, threads }: CommentsPanelProps) {
           </h6>
         </div>
         <p className="text-sm text-neutral-600 text-center py-8">
-          No comments yet. Share a document to start the conversation.
+          No annotations yet. Distribute a research report to start the dialogue.
         </p>
       </div>
     );
@@ -108,21 +111,78 @@ export function CommentsPanel({ vipId, threads }: CommentsPanelProps) {
 
             {/* Reply input */}
             <div className="flex items-center gap-2 mt-2">
-              <input
-                type="text"
-                placeholder="Reply..."
-                value={replyTexts[thread.id] || ""}
-                onChange={(e) =>
-                  setReplyTexts((prev) => ({
-                    ...prev,
-                    [thread.id]: e.target.value,
-                  }))
-                }
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleReply(thread.id);
-                }}
-                className="flex-1 h-7 px-2 text-xs bg-neutral-100 border border-neutral-300 rounded-cta placeholder-neutral-500 outline-none focus:border-brand-300"
-              />
+              <div className="flex-1 min-w-0">
+                {(() => {
+                  const suggested = getBankerSuggestedReply({
+                    thread,
+                    vipName,
+                    bankerName: null,
+                  });
+                  const currentText = replyTexts[thread.id] || "";
+                  const showSuggestion = Boolean(suggested) && !currentText.trim();
+
+                  return (
+                    <div className="flex flex-col gap-1">
+                      {showSuggestion && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 2 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.16 }}
+                          className="flex items-center justify-between gap-2"
+                        >
+                          <div className="flex items-center gap-2">
+                            <AIPersonalizedBadge
+                              variant="reply"
+                              label="AI Suggested Response"
+                              className="px-2 py-0.5"
+                            />
+                            <span className="text-[10px] text-neutral-600 truncate">
+                              {suggested}
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setReplyTexts((prev) => ({
+                                ...prev,
+                                [thread.id]: suggested,
+                              }))
+                            }
+                            className="text-[10px] font-semibold text-brand-500 hover:text-brand-700 transition-colors whitespace-nowrap inline-flex items-center gap-1"
+                            title="Insert the AI suggested reply"
+                          >
+                            <Sparkles size={12} />
+                            Insert
+                          </button>
+                        </motion.div>
+                      )}
+                      <input
+                        type="text"
+                        placeholder="Reply..."
+                        value={currentText}
+                        onChange={(e) =>
+                          setReplyTexts((prev) => ({
+                            ...prev,
+                            [thread.id]: e.target.value,
+                          }))
+                        }
+                        onKeyDown={(e) => {
+                          if (e.key === "Tab" && showSuggestion) {
+                            e.preventDefault();
+                            setReplyTexts((prev) => ({
+                              ...prev,
+                              [thread.id]: suggested,
+                            }));
+                            return;
+                          }
+                          if (e.key === "Enter") handleReply(thread.id);
+                        }}
+                        className="w-full h-7 px-2 text-xs bg-neutral-100 border border-neutral-300 rounded-cta placeholder-neutral-500 outline-none focus:border-brand-300"
+                      />
+                    </div>
+                  );
+                })()}
+              </div>
               <Button
                 variant="primary"
                 size="xsm"

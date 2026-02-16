@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Input";
+import { AIPersonalizedBadge } from "@/components/ui/AIPersonalizedBadge";
 import { Avatar } from "@/components/ui/Avatar";
 import { useApp } from "@/lib/vip-context";
 import { VIP, Document } from "@/lib/types";
@@ -136,12 +137,27 @@ export function DocumentShareModal({
         </div>
 
         {/* Message */}
-        <Textarea
-          label="Personalized Message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="min-h-[120px]"
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 2 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.18 }}
+          className="flex flex-col gap-1.5"
+        >
+          <div className="flex items-center justify-between gap-3">
+            <label className="text-sm font-bold text-neutral-950 font-[family-name:var(--font-body)]">
+              AI Generated Message
+            </label>
+            <AIPersonalizedBadge variant="message" />
+          </div>
+          <p className="text-xs text-neutral-600">
+            Pre-filled with an AI-suggested template. Edit as needed.
+          </p>
+          <Textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className="min-h-[120px]"
+          />
+        </motion.div>
 
         {/* Actions */}
         <AnimatePresence mode="wait">

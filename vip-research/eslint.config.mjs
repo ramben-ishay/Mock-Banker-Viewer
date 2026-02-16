@@ -16,7 +16,7 @@ const eslintConfig = defineConfig([
     "public/pdf.worker.min.mjs",
     "public/**/*.min.*",
   ]),
-  // Prototype UI intentionally uses some effect-driven animations/sync.
+  // The UI intentionally uses some effect-driven animations/sync.
   // Keep lint focused on real issues while allowing this pattern.
   {
     rules: {

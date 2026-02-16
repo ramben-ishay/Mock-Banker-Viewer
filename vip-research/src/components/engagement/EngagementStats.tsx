@@ -8,12 +8,14 @@ interface EngagementStatsProps {
   docsShared: number;
   avgCompletion: number;
   lastActive: string;
+  compact?: boolean;
 }
 
 export function EngagementStats({
   docsShared,
   avgCompletion,
   lastActive,
+  compact = false,
 }: EngagementStatsProps) {
   const stats = [
     {
@@ -40,7 +42,11 @@ export function EngagementStats({
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div
+      className={`grid grid-cols-1 gap-6 ${
+        compact ? "md:grid-cols-2 xl:grid-cols-3" : "md:grid-cols-3"
+      }`}
+    >
       {stats.map((stat, i) => (
         <motion.div
           key={stat.label}

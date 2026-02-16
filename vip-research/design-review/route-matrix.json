@@ -13,8 +13,7 @@
       "name": "vips_list",
       "path": "/vips",
       "states": [
-        "crm_empty",
-        "crm_connected",
+        "default",
         "add_vip_modal_open",
         "add_vip_validation_error"
       ]

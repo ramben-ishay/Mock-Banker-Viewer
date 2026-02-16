@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/vips", label: "My VIPs", icon: Users },
-  { href: "/documents", label: "Documents", icon: FileText },
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/documents", label: "Research Library", icon: FileText },
+  { href: "/dashboard", label: "Coverage Dashboard", icon: LayoutDashboard },
 ];
 
 export function Sidebar() {
@@ -52,23 +52,6 @@ export function Sidebar() {
           })}
         </ul>
       </nav>
-
-      {/* Footer */}
-      <div className="px-5 py-5 bg-neutral-100/50 backdrop-blur-sm">
-        <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-200 transition-colors cursor-pointer">
-          <div className="w-9 h-9 rounded-full bg-brand-500 flex items-center justify-center text-white text-sm font-bold shadow-md shadow-brand-500/10">
-            YB
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-bold text-neutral-950">
-              Your Banker
-            </span>
-            <span className="text-[11px] font-medium text-neutral-600 uppercase tracking-wider">
-              Private Banking
-            </span>
-          </div>
-        </div>
-      </div>
     </aside>
   );
 }

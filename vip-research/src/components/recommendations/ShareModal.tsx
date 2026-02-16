@@ -1,13 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Input";
+import { AIPersonalizedBadge } from "@/components/ui/AIPersonalizedBadge";
+import { TypewriterText } from "@/components/ui/TypewriterText";
 import { useApp } from "@/lib/vip-context";
 import { Recommendation, QuoteSuggestion as QuoteSuggestionType } from "@/lib/types";
-import { QUOTE_SUGGESTIONS, DOCUMENTS } from "@/lib/mock-data";
-import { Send, ChevronDown, ChevronUp, Check, X, Quote, ExternalLink } from "lucide-react";
+import { QUOTE_SUGGESTIONS } from "@/lib/data";
+import { generatePersonalizedComment } from "@/lib/personalized-comments";
+import { Send, ChevronDown, ChevronUp, Check, X, Sparkles, ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface ShareModalProps {
@@ -18,18 +21,6 @@ interface ShareModalProps {
   vipId: string;
 }
 
-function generatePersonalizedComment(vipName: string, quoteText: string): string {
-  const firstName = vipName.split(" ")[0];
-  const snippet = quoteText.length > 60 ? quoteText.substring(0, 60) + "..." : quoteText;
-  const templates = [
-    `Hi ${firstName}, following our discussion last week, this finding on "${snippet}" could be particularly relevant for your portfolio.`,
-    `${firstName}, this passage caught my attention given your current positioning. The data on "${snippet}" may inform your next allocation decision.`,
-    `Hi ${firstName}, I wanted to flag this specific insight: "${snippet}". It connects directly to the themes we discussed in our last meeting.`,
-  ];
-  const index = Math.abs(quoteText.length % templates.length);
-  return templates[index];
-}
-
 export function ShareModal({
   isOpen,
   onClose,
@@ -38,6 +29,7 @@ export function ShareModal({
   vipId,
 }: ShareModalProps) {
   const { dispatch, addToast } = useApp();
+  const vipFirstName = useMemo(() => vipName.split(" ")[0] || vipName, [vipName]);
   const [message, setMessage] = useState(
     `Hi ${vipName},\n\nI thought you'd find this research particularly relevant given your current interests. ${recommendation.aiExplanation}\n\nLet me know if you'd like to discuss any of the key findings.\n\nBest regards`
   );
@@ -45,11 +37,15 @@ export function ShareModal({
   const [quotes, setQuotes] = useState<
     (QuoteSuggestionType & { comment: string; status: "pending" | "approved" | "rejected" })[]
   >(
-    (QUOTE_SUGGESTIONS[recommendation.documentId] || []).map((q, idx) => ({
+    (QUOTE_SUGGESTIONS[recommendation.documentId] || []).map((q) => ({
       ...q,
       comment: generatePersonalizedComment(vipName, q.quoteText),
       status: "pending" as const,
     }))
+  );
+  const [didAnimateDrafts, setDidAnimateDrafts] = useState(false);
+  const [drafts, setDrafts] = useState<Record<string, { stage: "typing" | "done"; delayMs: number }>>(
+    {}
   );
 
   const handleSend = () => {
@@ -94,18 +90,51 @@ export function ShareModal({
   };
 
   const pendingQuotes = quotes.filter((q) => q.status !== "rejected");
+  const pendingDraftQuotes = quotes.filter((q) => q.status === "pending");
+  const approvedCount = quotes.filter((q) => q.status === "approved").length;
+
+  useEffect(() => {
+    if (!showQuotes) return;
+    if (didAnimateDrafts) return;
+    setDidAnimateDrafts(true);
+
+    // Only animate the initial AI drafts once (first time expanded).
+    const nextDrafts: Record<string, { stage: "typing" | "done"; delayMs: number }> = {};
+    pendingDraftQuotes.forEach((q, idx) => {
+      nextDrafts[q.id] = { stage: "typing", delayMs: idx * 180 };
+    });
+    setDrafts(nextDrafts);
+  }, [showQuotes, didAnimateDrafts, pendingDraftQuotes]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setDrafts({});
+      setDidAnimateDrafts(false);
+      setShowQuotes(false);
+    }
+  }, [isOpen]);
+
+  const quoteListVariants = {
+    hidden: { opacity: 1 },
+    show: { opacity: 1, transition: { staggerChildren: 0.12 } },
+  };
+
+  const quoteItemVariants = {
+    hidden: { opacity: 0, y: 6 },
+    show: { opacity: 1, y: 0 },
+  };
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Share Research"
+      title="Distribute Research"
       maxWidth="max-w-2xl"
     >
       <div className="flex flex-col gap-4">
         {/* Document and VIP info */}
         <div className="bg-neutral-200 rounded-cta p-3">
-          <p className="text-sm text-neutral-600">Sharing with</p>
+          <p className="text-sm text-neutral-600">Distributing to</p>
           <p className="text-base font-semibold text-neutral-950">
             {vipName}
           </p>
@@ -120,7 +149,7 @@ export function ShareModal({
 
         {/* Personalized Message */}
         <Textarea
-          label="Personalized Message"
+          label="Coverage Note"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           className="min-h-[120px]"
@@ -133,13 +162,21 @@ export function ShareModal({
             className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-neutral-900 hover:bg-neutral-100 transition-colors cursor-pointer"
           >
             <span className="flex items-center gap-2">
-              <Quote size={16} className="text-brand-500" />
-              Add a Comment
-              {quotes.filter((q) => q.status === "approved").length > 0 && (
-                <span className="ml-1 px-1.5 py-0.5 bg-status-green-100 text-status-green-700 text-xs rounded-xsm">
-                  {quotes.filter((q) => q.status === "approved").length} approved
-                </span>
-              )}
+              <Sparkles size={16} className="text-brand-500" />
+              AI-Generated Annotations
+              <AnimatePresence mode="popLayout" initial={false}>
+                {approvedCount > 0 && (
+                  <motion.span
+                    key={approvedCount}
+                    initial={{ opacity: 0, scale: 0.95, y: -1 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -1 }}
+                    className="ml-1 px-1.5 py-0.5 bg-status-green-100 text-status-green-700 text-xs rounded-xsm"
+                  >
+                    {approvedCount} approved
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </span>
             {showQuotes ? (
               <ChevronUp size={16} />
@@ -158,16 +195,52 @@ export function ShareModal({
                 className="overflow-hidden"
               >
                 <div className="px-4 pb-4 flex flex-col gap-3">
-                  <p className="text-xs text-neutral-600">
-                    AI suggested key passages from the document. Approve to
-                    attach as annotations. Comments are pre filled with personalized suggestions.
-                  </p>
+                  <motion.div
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.18 }}
+                    className="rounded-cta border border-brand-200 bg-brand-100 px-3 py-2"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <AIPersonalizedBadge
+                        variant="commenter"
+                        label="AI Coverage Note"
+                      />
+                      <span className="text-[10px] text-neutral-600">
+                        Approve to include as margin notes
+                      </span>
+                    </div>
+                    <p className="text-xs text-neutral-700 mt-1">
+                      <TypewriterText
+                        text={`AI analyzed ${recommendation.documentTitle} and prepared ${pendingQuotes.length} personalized annotations for ${vipFirstName}.`}
+                        speed={10}
+                        startDelay={120}
+                        showCursor={false}
+                      />
+                    </p>
+                  </motion.div>
                   <AnimatePresence>
-                    {pendingQuotes.map((quote) => (
+                    <motion.div
+                      variants={quoteListVariants}
+                      initial="hidden"
+                      animate="show"
+                      className="flex flex-col gap-3"
+                    >
+                      {pendingQuotes.map((quote) => {
+                        const draft = drafts[quote.id];
+                        const isTyping = draft?.stage === "typing";
+                        const draftDelayMs = draft?.delayMs ?? 0;
+                        return (
                       <motion.div
                         key={quote.id}
+                        variants={quoteItemVariants}
                         exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-                        transition={{ duration: 0.2 }}
+                        transition={{ duration: 0.2, type: "spring", stiffness: 520, damping: 34 }}
+                        animate={
+                          quote.status === "approved"
+                            ? { scale: 1.01 }
+                            : { scale: 1 }
+                        }
                         className={`border rounded-cta p-3 ${
                           quote.status === "approved"
                             ? "border-status-green-500 bg-status-green-100"
@@ -187,15 +260,62 @@ export function ShareModal({
                         {/* Comment input */}
                         {quote.status === "pending" && (
                           <>
-                            <input
-                              type="text"
-                              placeholder="Add your comment on this passage..."
-                              value={quote.comment}
-                              onChange={(e) =>
-                                handleCommentChange(quote.id, e.target.value)
-                              }
-                              className="w-full h-8 px-3 text-sm bg-neutral-000 border border-neutral-300 rounded-cta placeholder-neutral-500 outline-none focus:border-brand-300 mb-2"
-                            />
+                            <div className="flex items-center justify-between mb-1">
+                              <div className="flex items-center gap-1.5 text-[10px] text-neutral-600">
+                                <Sparkles size={12} className="text-brand-500" />
+                                <span>{isTyping ? "AI writing" : "AI draft"}</span>
+                              </div>
+                              {isTyping && (
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setDrafts((prev) => ({
+                                      ...prev,
+                                      [quote.id]: { stage: "done", delayMs: draftDelayMs },
+                                    }))
+                                  }
+                                  className="text-[10px] font-semibold text-brand-500 hover:text-brand-700 transition-colors"
+                                >
+                                  Edit now
+                                </button>
+                              )}
+                            </div>
+                            {isTyping ? (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setDrafts((prev) => ({
+                                    ...prev,
+                                    [quote.id]: { stage: "done", delayMs: draftDelayMs },
+                                  }))
+                                }
+                                className="w-full text-left px-3 py-2 text-sm bg-neutral-000 border border-neutral-300 rounded-cta outline-none focus:border-brand-300 mb-2"
+                                title="Click to edit immediately"
+                              >
+                                <TypewriterText
+                                  text={quote.comment}
+                                  speed={10}
+                                  startDelay={draftDelayMs}
+                                  editBackspaceChars={10}
+                                  editPauseMs={260}
+                                  onComplete={() =>
+                                    setDrafts((prev) => ({
+                                      ...prev,
+                                      [quote.id]: { stage: "done", delayMs: draftDelayMs },
+                                    }))
+                                  }
+                                />
+                              </button>
+                            ) : (
+                              <textarea
+                                placeholder="Add your note on this passage..."
+                                value={quote.comment}
+                                onChange={(e) =>
+                                  handleCommentChange(quote.id, e.target.value)
+                                }
+                                className="w-full min-h-[56px] px-3 py-2 text-sm bg-neutral-000 border border-neutral-300 rounded-cta placeholder-neutral-500 outline-none focus:border-brand-300 mb-2 resize-none leading-relaxed"
+                              />
+                            )}
                             <div className="flex gap-2">
                               <Button
                                 variant="primary"
@@ -226,7 +346,9 @@ export function ShareModal({
                           </p>
                         )}
                       </motion.div>
-                    ))}
+                        );
+                      })}
+                    </motion.div>
                   </AnimatePresence>
                 </div>
               </motion.div>

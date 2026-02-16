@@ -313,9 +313,9 @@ When the search (magnifying glass) icon is clicked:
 
 ---
 
-## Notes for Prototype Implementation
+## Implementation Notes
 
-1. **The document viewer renders PDFs as white pages on a light blue gray background** — for the prototype, render mock content as white cards with shadow on `#F2F5FA` background.
+1. **The document viewer renders PDFs as white pages on a light blue gray background** — render content as white cards with shadow on `#F2F5FA` background.
 
 2. **The AI Chat panel slides in from the right at 420px width**, compressing the document viewer. It uses white background and the same Inter font family.
 
@@ -331,6 +331,6 @@ When the search (magnifying glass) icon is clicked:
 
 8. **Button styling**: 8px border radius, transparent backgrounds for icon buttons, no visible borders. 32x32 for icon buttons, 24x24 for toolbar icons.
 
-9. **The document has screen capture protection** ("Content protection active") but this should not be implemented in the prototype.
+9. **The document has screen capture protection** ("Content protection active") but this is intentionally not implemented.
 
 10. **Color scheme is very neutral**: white, light blue grays (`#F2F5FA`, `#F9FAFC`), with `#444AFF` as the only accent color for links and active states.

@@ -24,6 +24,7 @@ import "react-pdf/dist/Page/TextLayer.css";
 import type { HighlightArea, HighlightPadding, WalkthroughStep } from "@/lib/types";
 import type { FactifyViewerProps, ViewerCommentThread } from "./types";
 import { getChatResponse, getChatSuggestions, getDocumentSummary } from "@/lib/scripted-chat";
+import { getVipSuggestedReply } from "@/lib/personalized-comments";
 
 import {
   StarsIcon,
@@ -394,46 +395,71 @@ export function FactifyViewer({
   );
 
   const scrollToWtStep = useCallback(
-    (stepIndex: number) => {
+    (stepIndex: number): boolean => {
       const step = walkthroughSteps[stepIndex];
-      if (!step || !pdfScrollRef.current) return;
+      if (!step || !pdfScrollRef.current) return false;
       const pages = pdfScrollRef.current.querySelectorAll(".fv-pdf-page");
       const target = getEffectiveTarget(step);
       const targetPage = pages[target.pageNumber - 1] as HTMLElement;
-      if (targetPage) {
-        const container = pdfScrollRef.current;
-        const pageHeight = targetPage.offsetHeight;
-        const viewportHeight = container.offsetHeight;
-        const highlightYInPage = (target.highlightArea.top / 100) * pageHeight;
-        const pageOffsetTop = targetPage.offsetTop;
+      if (!targetPage) return false;
 
-        // Target scroll to center highlight at ~30% from top of viewport
-        const targetScrollTop =
-          pageOffsetTop + highlightYInPage - viewportHeight * 0.3;
+      const container = pdfScrollRef.current;
+      const pageHeight = targetPage.offsetHeight;
+      const viewportHeight = container.offsetHeight;
 
-        // Use instant scrolling for determinism and to avoid cases where
-        // smooth scrolling doesn't reliably bring the highlight into view.
-        container.scrollTo({
-          top: Math.max(0, targetScrollTop),
-          behavior: "auto",
+      // react-pdf lays out canvases/text layers async; avoid "scrolling" while the
+      // page still has no height/offset (first click after load race).
+      if (pageHeight < 20 || viewportHeight < 20) return false;
+
+      const highlightYInPage = (target.highlightArea.top / 100) * pageHeight;
+      const pageOffsetTop = targetPage.offsetTop;
+
+      // Target scroll to center highlight at ~30% from top of viewport
+      const targetScrollTop = pageOffsetTop + highlightYInPage - viewportHeight * 0.3;
+
+      // Use instant scrolling for determinism and to avoid cases where
+      // smooth scrolling doesn't reliably bring the highlight into view.
+      container.scrollTo({
+        top: Math.max(0, targetScrollTop),
+        behavior: "auto",
+      });
+
+      if (!isMobile) {
+        // Update card position to align with highlight (desktop only).
+        // On mobile we use fixed positioning via CSS.
+        const cardTopPx = Math.min(Math.max(viewportHeight * 0.3, 80), viewportHeight - 280);
+        setWtCardStyle({
+          top: `${cardTopPx}px`,
+          bottom: "auto",
+          transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
         });
-
-        if (!isMobile) {
-          // Update card position to align with highlight (desktop only).
-          // On mobile we use fixed positioning via CSS.
-          const cardTopPx = Math.min(
-            Math.max(viewportHeight * 0.3, 80),
-            viewportHeight - 280
-          );
-          setWtCardStyle({
-            top: `${cardTopPx}px`,
-            bottom: "auto",
-            transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
-          });
-        }
       }
+
+      return true;
     },
     [walkthroughSteps, isMobile, getEffectiveTarget]
+  );
+
+  // Scroll requests can happen before react-pdf has fully laid out page heights.
+  // Retrying makes the first "Start Walkthrough" click deterministic.
+  const wtScrollReqIdRef = useRef(0);
+  const requestScrollToWtStep = useCallback(
+    (stepIndex: number) => {
+      const myReqId = ++wtScrollReqIdRef.current;
+      let attempt = 0;
+
+      const tick = () => {
+        if (wtScrollReqIdRef.current !== myReqId) return;
+        const ok = scrollToWtStep(stepIndex);
+        if (ok) return;
+        attempt += 1;
+        if (attempt > 80) return; // ~4s worst-case at 50ms
+        window.setTimeout(tick, 50);
+      };
+
+      tick();
+    },
+    [scrollToWtStep]
   );
 
   // Compute a precise target (page + highlight area) for the current step.
@@ -522,28 +548,30 @@ export function FactifyViewer({
     if (!step) return;
     const target = wtTargets[step.id];
     if (!target || target.source !== "computed") return;
-    scrollToWtStep(wtStepIndex);
-  }, [wtActive, currentWtStep, wtTargets, scrollToWtStep, wtStepIndex]);
+    requestScrollToWtStep(wtStepIndex);
+  }, [wtActive, currentWtStep, wtTargets, requestScrollToWtStep, wtStepIndex]);
 
   const startWalkthrough = useCallback(() => {
     setWtActive(true);
     setWtStepIndex(0);
-    setTimeout(() => scrollToWtStep(0), 100);
-  }, [scrollToWtStep]);
+    requestScrollToWtStep(0);
+  }, [requestScrollToWtStep]);
 
   const goToWtStep = useCallback(
     (index: number) => {
       if (index < 0 || index >= walkthroughSteps.length) return;
       setWtStepIndex(index);
-      scrollToWtStep(index);
+      requestScrollToWtStep(index);
     },
-    [walkthroughSteps.length, scrollToWtStep]
+    [walkthroughSteps.length, requestScrollToWtStep]
   );
 
   const endWalkthrough = useCallback(() => {
     setWtActive(false);
     setWtStepIndex(0);
     setWtCardStyle({});
+    // Cancel any in-flight retry loop.
+    wtScrollReqIdRef.current += 1;
   }, []);
 
   return (
@@ -1005,12 +1033,12 @@ function SidePanelStrip({
 // ======================== AI CHAT DRAWER ========================
 
 const FALLBACK_SUMMARY_TEXT =
-  "This document provides a detailed analysis examining key themes, data, and conclusions. The AI has processed all pages and is ready to answer questions about the content.";
+  "This research report presents a structured analysis of key themes, data, and investment conclusions. The AI assistant has processed all pages and is ready to answer questions on the content and its portfolio implications.";
 
 const FOLLOW_UP_QUESTIONS = [
-  "What are the main findings or conclusions of this document?",
-  "Can you summarize the key data points presented?",
-  "What methodology or framework does this document use?",
+  "What are the key investment conclusions?",
+  "Summarize the critical data points and estimates",
+  "What analytical framework does this report use?",
 ];
 
 interface Msg {
@@ -1180,13 +1208,11 @@ function AIChatDrawer({
               </svg>
             </div>
             <div>
-              <div className="fv-chat-welcome-title">Welcome!</div>
+              <div className="fv-chat-welcome-title">Research Assistant</div>
               <div className="fv-chat-welcome-desc">
-                I&apos;ve read this document so you don&apos;t have to, so
-                ask me anything! What do you want to know about it?
-              </div>
-              <div className="fv-chat-demo-note">
-                Demo mode responses use sample text.
+                I&apos;ve analyzed this report end-to-end. Ask me about the
+                investment thesis, key data, risk factors, or portfolio
+                implications.
               </div>
             </div>
           </div>
@@ -1257,7 +1283,7 @@ function AIChatDrawer({
               {isMobile ? (
                 <textarea
                   className="fv-chat-editable fv-chat-textarea-mobile"
-                  placeholder="Ask me anything about this document"
+                  placeholder="Ask about this research..."
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={onKey}
@@ -1274,7 +1300,7 @@ function AIChatDrawer({
                     setInput((e.target as HTMLSpanElement).textContent ?? "")
                   }
                   onKeyDown={onKey}
-                  data-placeholder="Ask me anything about this document"
+                  data-placeholder="Ask about this research..."
                   className="fv-chat-editable"
                 />
               )}
@@ -1316,7 +1342,7 @@ function getAuthorDisplayName(
   vipMode: boolean
 ): string {
   if (!vipMode) return author.name;
-  return author.role === "vip" ? "You" : "Your Banker";
+  return author.role === "vip" ? "You" : "Alexandra Whitfield";
 }
 
 function shouldShowBankerBadge(
@@ -1324,8 +1350,9 @@ function shouldShowBankerBadge(
   displayName: string
 ): boolean {
   if (author.role !== "banker") return false;
-  // If the label already contains "Banker" (e.g. "Your Banker"), don't append a badge.
-  return !displayName.toLowerCase().includes("banker");
+  void displayName;
+  // Display name is not a reliable signal for role; show the badge for banker-role authors.
+  return true;
 }
 
 function CommentsDrawer({
@@ -1575,23 +1602,14 @@ function AppCommentThread({
     }
   }, [replyText, showReply]);
 
-  const getSuggestedReply = useCallback(() => {
+  const suggestedReply = useMemo(() => {
     if (!vipMode) return "";
-    const firstName = (vipName ? vipName.split(" ")[0] : "Alexandra") || "Alexandra";
-    const snippet =
-      thread.quoteText.length > 90
-        ? thread.quoteText.slice(0, 90).trim() + "..."
-        : thread.quoteText;
-    const templates = [
-      `Thanks for flagging this. The point on "${snippet}" is helpful. Can you share your conviction level and what could change the outlook?`,
-      `Appreciate the highlight. On "${snippet}", how should we think about near-term risks vs the base case?`,
-      `This is useful context. For "${snippet}", can you point me to the section with supporting data and the key assumptions?`,
-    ];
-    const idx = Math.abs(thread.id.length + snippet.length) % templates.length;
-    return templates[idx];
+    return getVipSuggestedReply({
+      threadId: thread.id,
+      quoteText: thread.quoteText,
+      vipName,
+    });
   }, [thread.id, thread.quoteText, vipName, vipMode]);
-
-  const suggestedReply = getSuggestedReply();
 
   const acceptSuggestedReply = useCallback(() => {
     if (!suggestedReply) return;
@@ -1661,52 +1679,68 @@ function AppCommentThread({
       {/* Reply input */}
       <div className="fv-reply-footer">
         {showReply ? (
-          <div className="fv-reply-row">
-            <div className="fv-reply-input-wrap">
-              <textarea
-                ref={replyInputRef}
-                placeholder="Write a reply..."
-                value={replyText}
-                onChange={(e) => setReplyText(e.target.value)}
-                // Capture-phase to ensure Tab doesn't move focus to Cancel/Reply buttons.
-                onKeyDownCapture={(e) => {
-                  if (e.key === "Tab" && suggestedReply) {
-                    e.preventDefault();
-                    acceptSuggestedReply();
-                  }
+          <div className="fv-reply-col">
+            {Boolean(suggestedReply) && (
+              <div className="fv-ai-suggest-row">
+                <button
+                  type="button"
+                  className="fv-ai-suggest-btn"
+                  onClick={acceptSuggestedReply}
+                  title="Insert the AI suggested reply"
+                >
+                  <StarsIcon style={{ width: 14, height: 14 }} />
+                  Use AI suggestion
+                </button>
+                <span className="fv-ai-suggest-hint">Press Tab to insert</span>
+              </div>
+            )}
+            <div className="fv-reply-row">
+              <div className="fv-reply-input-wrap">
+                <textarea
+                  ref={replyInputRef}
+                  placeholder="Write a reply..."
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  // Capture-phase to ensure Tab doesn't move focus to Cancel/Reply buttons.
+                  onKeyDownCapture={(e) => {
+                    if (e.key === "Tab" && suggestedReply) {
+                      e.preventDefault();
+                      acceptSuggestedReply();
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Tab" && suggestedReply) {
+                      e.preventDefault();
+                      acceptSuggestedReply();
+                      return;
+                    }
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleReply();
+                    }
+                  }}
+                  className="fv-reply-input"
+                  autoFocus
+                  rows={1}
+                />
+              </div>
+              <button
+                className="fv-btn fv-btn-primary fv-reply-action-btn"
+                onClick={handleReply}
+                disabled={!replyText.trim()}
+              >
+                Reply
+              </button>
+              <button
+                className="fv-btn fv-btn-outlined fv-reply-action-btn"
+                onClick={() => {
+                  setShowReply(false);
+                  setReplyText("");
                 }}
-                onKeyDown={(e) => {
-                  if (e.key === "Tab" && suggestedReply) {
-                    e.preventDefault();
-                    acceptSuggestedReply();
-                    return;
-                  }
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleReply();
-                  }
-                }}
-                className="fv-reply-input"
-                autoFocus
-                rows={1}
-              />
+              >
+                Cancel
+              </button>
             </div>
-            <button
-              className="fv-btn fv-btn-primary fv-reply-action-btn"
-              onClick={handleReply}
-              disabled={!replyText.trim()}
-            >
-              Reply
-            </button>
-            <button
-              className="fv-btn fv-btn-outlined fv-reply-action-btn"
-              onClick={() => {
-                setShowReply(false);
-                setReplyText("");
-              }}
-            >
-              Cancel
-            </button>
           </div>
         ) : (
           <button
@@ -1770,7 +1804,7 @@ function PlaceholderDrawer({
         onClose={onClose}
       />
       <div className="fv-placeholder">
-        {name} panel (coming soon)
+        {name} panel
       </div>
     </>
   );
@@ -1830,12 +1864,12 @@ function WalkthroughCard({
   // Personalized idle text
   const idleText = vipName ? (
     <>
-      Hi {vipName.split(" ")[0]}, based on your interest in{" "}
+      {vipName.split(" ")[0]}, based on your investment focus in{" "}
       <strong>{vipInterests.slice(0, 2).join(" and ")}</strong>, we&apos;ve
-      highlighted the most relevant sections for you.
+      highlighted the sections most relevant to your portfolio.
     </>
   ) : (
-    "Discover the most relevant sections of this document based on your interests and reading history."
+    "Navigate to the sections most relevant to your investment mandate and engagement history."
   );
 
   return (

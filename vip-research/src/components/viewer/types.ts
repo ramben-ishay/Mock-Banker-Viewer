@@ -25,7 +25,7 @@ export interface ViewerCommentThread {
 }
 
 export interface FactifyViewerProps {
-  /** Document id used for demo scripts and cross-feature behavior */
+  /** Document id used for cross-feature behavior */
   docId?: string;
   /** When true, treat the viewer as the VIP/customer view */
   vipMode?: boolean;

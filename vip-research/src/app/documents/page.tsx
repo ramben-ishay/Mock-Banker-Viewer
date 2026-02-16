@@ -1,16 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
-import { DOCUMENTS, DOCUMENT_ALERTS, MOCK_VIPS } from "@/lib/mock-data";
-import { Tag } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
-import { Avatar } from "@/components/ui/Avatar";
-import { formatDate } from "@/lib/utils";
-import { ExternalLink, Search, FileText, AlertCircle, Send, BarChart3 } from "lucide-react";
-import { motion } from "framer-motion";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
+import { AlertCircle, Send } from "lucide-react";
+import { motion } from "framer-motion";
+import { DOCUMENTS, DOCUMENT_ALERTS, ENGAGEMENT_TIMELINES, RECOMMENDATIONS, VIPS } from "@/lib/data";
+import { Avatar } from "@/components/ui/Avatar";
+import { Button } from "@/components/ui/Button";
+import { DocumentsToolbar, type DocumentsFilterKey, type DocumentsSortKey } from "@/components/documents/DocumentsToolbar";
+import { AiSummaryBanner } from "@/components/documents/AiSummaryBanner";
+import { TopPerformersStrip } from "@/components/documents/TopPerformersStrip";
+import { DocumentCategorySection } from "@/components/documents/DocumentCategorySection";
 import { DocumentShareModal } from "@/components/recommendations/DocumentShareModal";
-import { VIP, Document } from "@/lib/types";
+import type { VIP, Document } from "@/lib/types";
+import {
+  computeAllDocumentMetrics,
+  getReferenceDateFromData,
+  RESEARCH_CATEGORIES,
+  type ResearchCategoryId,
+} from "@/lib/document-metrics";
+import { formatDate } from "@/lib/utils";
 
 interface ShareAlertState {
   document: Document;
@@ -21,50 +30,162 @@ interface ShareAlertState {
 export default function DocumentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [shareAlert, setShareAlert] = useState<ShareAlertState | null>(null);
+  const [activeFilters, setActiveFilters] = useState<DocumentsFilterKey[]>([]);
+  const [sortKey, setSortKey] = useState<DocumentsSortKey>("performance");
+  const [collapsedCategoryIds, setCollapsedCategoryIds] = useState<ResearchCategoryId[]>([]);
 
-  const filteredDocs = DOCUMENTS.filter((doc) => {
-    if (!searchQuery) return true;
-    const q = searchQuery.toLowerCase();
-    return (
-      doc.title.toLowerCase().includes(q) ||
-      doc.topics.some((t) => t.toLowerCase().includes(q))
-    );
-  });
+  const referenceDate = useMemo(() => {
+    return getReferenceDateFromData(DOCUMENTS, ENGAGEMENT_TIMELINES);
+  }, []);
+
+  const metricsByDocId = useMemo(() => {
+    return computeAllDocumentMetrics({
+      documents: DOCUMENTS,
+      engagementTimelines: ENGAGEMENT_TIMELINES,
+      recommendations: RECOMMENDATIONS,
+      documentAlerts: DOCUMENT_ALERTS,
+      referenceDate,
+    });
+  }, [referenceDate]);
+
+  const activeFilterSet = useMemo(() => new Set(activeFilters), [activeFilters]);
+  const collapsedCategorySet = useMemo(() => new Set(collapsedCategoryIds), [collapsedCategoryIds]);
+
+  const toggleFilter = (key: DocumentsFilterKey) => {
+    setActiveFilters((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]));
+  };
+
+  const toggleCollapsedCategory = (id: ResearchCategoryId) => {
+    setCollapsedCategoryIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  };
+
+  const topPerformers = useMemo(() => {
+    const items = DOCUMENTS.map((doc) => ({
+      doc,
+      metrics: metricsByDocId[doc.id],
+    })).filter((x) => x.metrics);
+
+    items.sort((a, b) => (b.metrics!.performanceScore ?? 0) - (a.metrics!.performanceScore ?? 0));
+    return items.slice(0, 5) as Array<{ doc: Document; metrics: NonNullable<typeof items[number]["metrics"]> }>;
+  }, [metricsByDocId]);
+
+  const filteredDocs = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    let docs = DOCUMENTS.slice();
+
+    if (q) {
+      docs = docs.filter((doc) => {
+        return (
+          doc.title.toLowerCase().includes(q) ||
+          doc.topics.some((t) => t.toLowerCase().includes(q))
+        );
+      });
+    }
+
+    // Derived thresholds (stable-ish): top 5 scores are “trending”.
+    const allScores = DOCUMENTS.map((d) => metricsByDocId[d.id]?.performanceScore ?? 0)
+      .slice()
+      .sort((a, b) => b - a);
+    const trendingCutoff = allScores[Math.min(4, allScores.length - 1)] ?? 0;
+
+    if (activeFilterSet.size > 0) {
+      docs = docs.filter((d) => {
+        const m = metricsByDocId[d.id];
+        if (!m) return false;
+
+        if (activeFilterSet.has("new_versions") && m.hasVersionAlert) return true;
+        if (activeFilterSet.has("needs_attention") && m.needsAttention) return true;
+        if (activeFilterSet.has("high_ai_match") && (m.maxRelevanceScore ?? 0) >= 75) return true;
+        if (activeFilterSet.has("trending") && (m.performanceScore ?? 0) >= trendingCutoff) return true;
+
+        return false;
+      });
+    }
+
+    const scoreFor = (d: Document) => metricsByDocId[d.id]?.performanceScore ?? 0;
+    const completionFor = (d: Document) => metricsByDocId[d.id]?.avgCompletion ?? 0;
+    const reachFor = (d: Document) => metricsByDocId[d.id]?.reachCount ?? 0;
+    const relevanceFor = (d: Document) => metricsByDocId[d.id]?.maxRelevanceScore ?? 0;
+
+    docs.sort((a, b) => {
+      switch (sortKey) {
+        case "newest":
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+        case "relevance":
+          return relevanceFor(b) - relevanceFor(a);
+        case "completion":
+          return completionFor(b) - completionFor(a);
+        case "reach":
+          return reachFor(b) - reachFor(a);
+        case "performance":
+        default:
+          return scoreFor(b) - scoreFor(a);
+      }
+    });
+
+    return docs;
+  }, [searchQuery, activeFilterSet, sortKey, metricsByDocId]);
+
+  const docsByCategory = useMemo(() => {
+    const by: Record<ResearchCategoryId, Document[]> = {
+      technology: [],
+      macro_fixed_income: [],
+      esg_energy: [],
+      real_assets_infra: [],
+      geopolitics_regional: [],
+      other: [],
+    };
+
+    for (const doc of filteredDocs) {
+      const cat = metricsByDocId[doc.id]?.categoryId ?? "other";
+      by[cat].push(doc);
+    }
+    return by;
+  }, [filteredDocs, metricsByDocId]);
+
+  const briefingText = useMemo(() => {
+    const updatedCount = DOCUMENT_ALERTS.length;
+    const attentionCount = DOCUMENTS.filter((d) => metricsByDocId[d.id]?.needsAttention).length;
+    const top = topPerformers[0];
+    const dayLabel = formatDate(referenceDate.toISOString());
+
+    const updatedLine =
+      updatedCount > 0
+        ? `${updatedCount} document ${updatedCount === 1 ? "has" : "have"} a newer version flagged for follow-up.`
+        : "No version updates are flagged right now.";
+
+    const topLine = top
+      ? `Top performer: ${top.doc.title} (${top.metrics.performanceScore} AI performance).`
+      : "Top performers will appear once engagement signals are available.";
+
+    const attentionLine =
+      attentionCount > 0
+        ? `${attentionCount} high-match documents have limited opens so far — consider a targeted share.`
+        : "All high-match recommendations have at least some engagement.";
+
+    return `As of ${dayLabel}: ${topLine} ${updatedLine} ${attentionLine}`;
+  }, [metricsByDocId, topPerformers, referenceDate]);
 
   return (
-    <div>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h5 className="text-2xl font-bold font-[family-name:var(--font-heading)] text-neutral-950">
-            Research Documents
-          </h5>
-          <p className="text-sm text-neutral-600 mt-1">
-            {DOCUMENTS.length} documents in your research library
-          </p>
-        </div>
-      </div>
+    <div className="flex flex-col gap-6">
+      <DocumentsToolbar
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+        activeFilters={activeFilterSet}
+        onToggleFilter={toggleFilter}
+        sortKey={sortKey}
+        onSortKeyChange={setSortKey}
+        totalCount={DOCUMENTS.length}
+        filteredCount={filteredDocs.length}
+      />
 
-      {/* Search */}
-      <div className="relative max-w-sm mb-6">
-        <Search
-          size={18}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500"
-        />
-        <input
-          type="text"
-          placeholder="Search by title or topic..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full h-10 pl-10 pr-4 bg-neutral-000 border border-neutral-300 rounded-cta text-sm text-neutral-950 placeholder-neutral-500 outline-none focus:border-brand-300 transition-colors"
-        />
-      </div>
+      <AiSummaryBanner text={briefingText} />
 
-      {/* Document Version Alerts */}
+      {/* Version alerts (keep explicit call-to-action for demo) */}
       {DOCUMENT_ALERTS.map((alert) => {
         const alertDoc = DOCUMENTS.find((d) => d.id === alert.documentId);
         const affectedVips = alert.affectedVipIds
-          .map((vid) => MOCK_VIPS.find((v) => v.id === vid))
+          .map((vid) => VIPS.find((v) => v.id === vid))
           .filter(Boolean);
         if (!alertDoc) return null;
         return (
@@ -72,26 +193,31 @@ export default function DocumentsPage() {
             key={alert.documentId}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-status-orange-100 border border-status-orange-500 rounded-popup p-4 mb-6"
+            className="bg-status-orange-100 border border-status-orange-500 rounded-popup p-4"
           >
             <div className="flex items-start gap-3">
               <AlertCircle size={20} className="text-status-orange-700 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <h6 className="text-sm font-semibold text-neutral-950">
-                    New Version Available: {alertDoc.title}
-                  </h6>
-                </div>
+                <h6 className="text-sm font-semibold text-neutral-950 mb-1">
+                  New Version Available: {alertDoc.title}
+                </h6>
                 <p className="text-sm text-neutral-800 mb-3">{alert.message}</p>
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-xs text-neutral-600">Previously read by:</span>
-                  <div className="flex items-center gap-2">
-                    {affectedVips.map((vip) => vip && (
-                      <Link key={vip.id} href={`/vips/${vip.id}`} className="flex items-center gap-1.5 hover:text-brand-500 transition-colors">
-                        <Avatar initials={vip.avatar.initials} color={vip.avatar.color} size="sm" />
-                        <span className="text-xs font-medium text-neutral-900">{vip.name}</span>
-                      </Link>
-                    ))}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {affectedVips.map(
+                      (vip) =>
+                        vip && (
+                          <Link
+                            key={vip.id}
+                            href={`/vips/${vip.id}`}
+                            className="flex items-center gap-1.5 hover:text-brand-500 transition-colors"
+                          >
+                            <Avatar initials={vip.avatar.initials} color={vip.avatar.color} size="sm" />
+                            <span className="text-xs font-medium text-neutral-900">{vip.name}</span>
+                          </Link>
+                        )
+                    )}
                   </div>
                 </div>
                 <Button
@@ -99,13 +225,11 @@ export default function DocumentsPage() {
                   size="sm"
                   icon={<Send size={14} />}
                   onClick={() => {
-                    if (alertDoc) {
-                      setShareAlert({
-                        document: alertDoc,
-                        previousVersion: alert.previousVersion,
-                        vips: affectedVips.filter((v): v is VIP => v !== undefined),
-                      });
-                    }
+                    setShareAlert({
+                      document: alertDoc,
+                      previousVersion: alert.previousVersion,
+                      vips: affectedVips.filter((v): v is VIP => v !== undefined),
+                    });
                   }}
                 >
                   Share updated version with them
@@ -116,60 +240,29 @@ export default function DocumentsPage() {
         );
       })}
 
-      {/* Document Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {filteredDocs.map((doc, index) => (
-          <motion.div
-            key={doc.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.05 }}
-            className="bg-neutral-000 border border-neutral-300 rounded-popup p-5 hover:shadow-fluffy hover:border-neutral-400 transition-all duration-200"
-          >
-            <div className="flex items-start gap-3 mb-3">
-              <div className="w-10 h-10 rounded-cta bg-brand-100 flex items-center justify-center flex-shrink-0">
-                <FileText size={20} className="text-brand-500" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-semibold text-neutral-950 font-[family-name:var(--font-heading)] leading-tight mb-1">
-                  {doc.title}
-                </div>
-                <p className="text-xs text-neutral-600">
-                  Published {formatDate(doc.date)}
-                  {doc.version && ` · ${doc.version}`}
-                </p>
-              </div>
-            </div>
+      <TopPerformersStrip items={topPerformers} />
 
-            {/* Topic Tags */}
-            <div className="flex flex-wrap gap-1.5 mb-4">
-              {doc.topics.map((topic) => (
-                <Tag key={topic}>{topic}</Tag>
-              ))}
-            </div>
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <div className="xl:col-span-12 flex flex-col gap-4">
+          {RESEARCH_CATEGORIES.filter((c) => docsByCategory[c.id].length > 0).map((category, idx) => (
+            <DocumentCategorySection
+              key={category.id}
+              category={category}
+              documents={docsByCategory[category.id]}
+              metricsByDocId={metricsByDocId}
+              collapsed={collapsedCategorySet.has(category.id)}
+              onToggleCollapsed={() => toggleCollapsedCategory(category.id)}
+              startIndexForAnimation={idx * 6}
+            />
+          ))}
 
-            {/* Actions */}
-            <div className="flex gap-2">
-              <Link href={`/viewer/${doc.id}`} className="flex-1">
-                <Button variant="primary" size="sm" icon={<ExternalLink size={14} />} className="w-full">
-                  Open in Factify
-                </Button>
-              </Link>
-              <Link href={`/document/${doc.id}`}>
-                <Button variant="secondary" size="sm" icon={<BarChart3 size={14} />}>
-                  Analytics
-                </Button>
-              </Link>
+          {filteredDocs.length === 0 && (
+            <div className="text-center py-16 text-neutral-600 bg-neutral-000 border border-neutral-300 rounded-popup">
+              <p>No documents match your search or filters.</p>
             </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {filteredDocs.length === 0 && (
-        <div className="text-center py-16 text-neutral-600">
-          <p>No documents match your search.</p>
+          )}
         </div>
-      )}
+      </div>
 
       {/* Share Updated Document Modal */}
       {shareAlert && (

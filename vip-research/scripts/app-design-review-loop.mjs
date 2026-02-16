@@ -70,24 +70,11 @@ function isVipDetailRoute(route) {
   return route.startsWith("/vips/vip-");
 }
 
-async function connectCrmIfNeeded(page) {
-  const connectedMarker = page.getByText(/CRM Synchronized/i);
-  if (await connectedMarker.isVisible().catch(() => false)) return;
-
-  // If we're not connected, this button should exist in the empty state.
-  const clicked = await safeClick(page, "button", /Connect to Salesforce/i);
-  if (clicked) {
-    // VipListPage simulates async connect via setTimeout(2000).
-    await page.waitForTimeout(2300);
-  }
-}
-
 async function gotoVipDetailViaList(page, baseUrl, vipRoute) {
   // Navigating directly to /vips/vip-* resets AppProvider state and shows "VIP not found".
-  // Instead: go to /vips, connect, then use client-side navigation to the VIP detail.
+  // Instead: go to /vips, then use client-side navigation to the VIP detail.
   await page.goto(`${baseUrl}/vips`, { waitUntil: "domcontentloaded", timeout: 45000 });
   await waitForStable(page);
-  await connectCrmIfNeeded(page);
 
   const link = page.locator(`a[href='${vipRoute}']`).first();
   if (await link.isVisible().catch(() => false)) {
@@ -125,11 +112,6 @@ async function captureState(page, options) {
     await page.waitForTimeout(250);
   }
 
-  if (route === "/vips" && stateId === "crm_connected") {
-    await safeClick(page, "button", /Connect to Salesforce/i);
-    await page.waitForTimeout(2300);
-  }
-
   if (route === "/vips" && stateId === "add_vip_modal_open") {
     const addClicked =
       (await safeClick(page, "button", /^Add VIP$/i)) ||
@@ -158,7 +140,7 @@ async function captureState(page, options) {
   if (isVipDetailRoute(route) && stateId === "share_modal_quotes_expanded") {
     await safeClick(page, "button", /Share with VIP/i);
     await page.waitForTimeout(300);
-    await safeClick(page, "button", /Add a Comment/i);
+    await safeClick(page, "button", /AI Personalized|Add a Comment/i);
   }
 
   if (route === "/documents" && stateId === "search_filtered") {

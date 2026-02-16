@@ -4,7 +4,7 @@ import React, { use, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useApp } from "@/lib/vip-context";
-import { DOCUMENTS, MOCK_VIPS, personalizeWalkthroughSteps } from "@/lib/mock-data";
+import { DOCUMENTS, VIPS, personalizeWalkthroughSteps } from "@/lib/data";
 import type { ViewerCommentThread } from "@/components/viewer/types";
 
 const FactifyViewer = dynamic(
@@ -30,7 +30,7 @@ export default function ViewerPage({
   const doc = DOCUMENTS.find((d) => d.id === docId);
   const vip =
     (vipId ? state.vips.find((v) => v.id === vipId) : undefined) ||
-    (vipId ? MOCK_VIPS.find((v) => v.id === vipId) : undefined) ||
+    (vipId ? VIPS.find((v) => v.id === vipId) : undefined) ||
     state.vips.find((v) => v.name.toLowerCase().includes("alexandra"));
 
   // Generate personalized walkthrough steps
@@ -73,7 +73,7 @@ export default function ViewerPage({
     for (const [vid, threads] of Object.entries(state.commentThreads)) {
       const thread = threads.find((t) => t.id === threadId);
       if (thread && thread.documentId === docId) {
-        const isVipMode = true; // Always enable VIP/Tab mode in the viewer for demo
+        const isVipMode = true;
         if (isVipMode && (vip || vid === vipId)) {
           const activeVip = vip || state.vips.find(v => v.id === vid);
           dispatch({
